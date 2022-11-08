@@ -28,8 +28,14 @@ template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
 template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
 template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h
+template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
+template\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
+template\main.o: ..\App\usart.h
+template\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+template\main.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
 template\main.o: ../Inc/gpio.h
 template\main.o: ..\User\config.h
+template\main.o: D:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
 template\main.o: ..\App\led.h
 template\main.o: ..\App\lcd.h
 template\main.o: ..\App\key.h

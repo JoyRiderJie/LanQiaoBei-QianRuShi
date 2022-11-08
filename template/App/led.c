@@ -69,3 +69,18 @@ void turnOnLedByLocation(uint16_t LEDLOCATION,char LEDSTATE)
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET);
 	
 }
+
+/*****************************************************
+* 函数功能：根据LED的位置反转LED的状态
+* 函数参数：
+*			uint16_t LEDLOCATION:需要操作LED的位置
+* 函数返回值：无
+******************************************************/
+void rollbackLedByLocation(uint16_t LEDLOCATION)
+{
+	HAL_GPIO_TogglePin(GPIOC,LEDLOCATION);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET);
+	
+}
+

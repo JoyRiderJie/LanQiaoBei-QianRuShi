@@ -1,6 +1,5 @@
 template\config.o: ..\User\config.c
 template\config.o: ..\User\config.h
-template\config.o: ..\App\led.h
 template\config.o: ../Inc/main.h
 template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 template\config.o: ../Inc/stm32g4xx_hal_conf.h
@@ -30,7 +29,12 @@ template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h
 template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ramfunc.h
 template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
 template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h
-template\config.o: ..\App\lcd.h
-template\config.o: ..\App\key.h
+template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
+template\config.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 template\config.o: D:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
 template\config.o: D:\keil\ARM\ARMCC\Bin\..\include\stdio.h
+template\config.o: D:\keil\ARM\ARMCC\Bin\..\include\string.h
+template\config.o: ..\App\led.h
+template\config.o: ..\App\lcd.h
+template\config.o: ..\App\key.h
+template\config.o: ..\App\usart.h

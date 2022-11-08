@@ -33,4 +33,12 @@ void changeAllLedByStateNumber(char LEDSTATE);
 ******************************************************/
 void turnOnLedByLocation(uint16_t LEDLOCATION,char LEDSTATE);
 
+/*****************************************************
+* 函数功能：根据LED的位置反转LED的状态
+* 函数参数：
+*			uint16_t LEDLOCATION:需要操作LED的位置
+* 函数返回值：无
+******************************************************/
+void rollbackLedByLocation(uint16_t LEDLOCATION);
+
 #endif
