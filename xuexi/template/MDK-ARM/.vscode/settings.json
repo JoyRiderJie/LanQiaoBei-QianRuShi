@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "led.h": "c",
+        "stm32g4xx_hal.h": "c",
+        "lcd.h": "c",
+        "key.h": "c",
+        "usart.h": "c",
+        "main.h": "c",
+        "stm32g4xx_hal_conf.h": "c",
+        "cstring": "c",
+        "iosfwd": "c",
+        "ostream": "c",
+        "xlocale": "c",
+        "config.h": "c",
+        "stm32g4xx_it.h": "c"
+    }
+}

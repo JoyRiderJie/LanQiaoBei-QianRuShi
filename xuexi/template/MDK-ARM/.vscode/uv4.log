@@ -1,0 +1,18 @@
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\keil\ARM\ARMCC\Bin'
+Build target 'template'
+compiling usart.c...
+compiling config.c...
+..\User\config.c(147): warning:  #550-D: variable "keyDown"  was set but never used
+      char keyValue = 0,keyDown = 0,keyUp = 0;
+..\User\config.c(147): warning:  #550-D: variable "keyUp"  was set but never used
+      char keyValue = 0,keyDown = 0,keyUp = 0;
+..\User\config.c(151): warning:  #177-D: variable "keyTime"  was declared but never referenced
+  	static uint32_t keyTime = 0; 
+..\User\config.c(153): warning:  #177-D: variable "keyFlag"  was declared but never referenced
+  	int keyFlag = 0;
+..\User\config.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=9400 RO-data=568 RW-data=24 ZI-data=1368  
+FromELF: creating hex file...
+"template\template.axf" - 0 Error(s), 4 Warning(s).
+Build Time Elapsed:  00:00:04
