@@ -97,18 +97,9 @@ void sysWork(void)
 		passwd_wrong_count = 0;
 	}
 	
-	sprintf(temp,"c:%d f:%6d",crrl_t,frd);
-	LCD_DisplayStringLine(Line0,(uint8_t*)temp);
-	
-	
-	sprintf(temp,"passwd:%s",Rxbuff);
-	LCD_DisplayStringLine(Line6,(uint8_t*)temp);
-	
-	sprintf(temp,"flag:%d count:%d",time7_count_start_flag,time7_count);
-	LCD_DisplayStringLine(Line7,(uint8_t*)temp);
-	
-	sprintf(temp,"data:%s len:%d",passwd,strlen(passwd));
-	LCD_DisplayStringLine(Line8,(uint8_t*)temp);
+//	//显示当前密码
+//	sprintf(temp,"passwd:%s",passwd);
+//	LCD_DisplayStringLine(Line8,(uint8_t*)temp);
 }
 
 /***非阻塞模式下定时器中断回调函数***/
@@ -129,22 +120,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if(huart->Instance == USART1){
 		// 重新使能中断
 		HAL_UART_Receive_IT(huart,(uint8_t *)&Rxbuff,sizeof(Rxbuff)); 
-	}
-}
-
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-
-	if(htim->Instance == TIM3)
-	{
-		//读取定时器的计数值
-		crrl_t = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
-		//将定时器的计数值设置成0
-		__HAL_TIM_SetCounter(htim,0);
-		//计算频率
-		frd = (80000000/80)/crrl_t;
-		//重新开启定时器
-		HAL_TIM_IC_Start_IT(htim,TIM_CHANNEL_1);
 	}
 }
 
