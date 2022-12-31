@@ -35,7 +35,7 @@ void STAViewDisplay(void);
 void PSDViewDisplay(void);
 
 /****************************************
-* 函数功能：PWM以2KHz的频率工作
+* 函数功能：修改PWM的频率工作
 * 函数参数：
 *			unsigned int autoreloadDate:重装载值
 *			unsigned int compareDate:PWM的比较值
