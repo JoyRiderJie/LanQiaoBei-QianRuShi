@@ -11,18 +11,13 @@
 #include "stdlib.h"
 
 //声明外部变量
-extern unsigned int uiTime7CountLED1;
-extern unsigned int uiTime7CountLED1Flag;
-extern unsigned int uiTime7CountLED2;
-extern unsigned int uiTime7CountLED2Flag;
-extern unsigned int uiTime7Count;
+extern unsigned int uiTime7Count[3];
+extern unsigned int uiTime7CountFlag[3];
 extern unsigned char cRxBuff[1];
 extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim7;
 extern unsigned int iRxFlag;
-
-
 
 //定义一个结构体存储商品信息
 struct goods{
@@ -55,7 +50,6 @@ void sysInit(void);
 * 函数返回值：无
 *************************************/
 void sysWork(void);
-
 
 /*************************************
 * 函数功能：按键工作函数
@@ -96,27 +90,6 @@ struct goods*goodsInit(int iGoodsCount,double dGoodsPrice,int iGoodsBuyCount);
 *************************************/
 void usartProcess(void);
 
-/*************************************
-* 函数功能：商品购买界面显示
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void shopDisplay(void);
-
-/*************************************
-* 函数功能：商品价格界面显示
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void priceDisplay(void);
-
-/*************************************
-* 函数功能：商品库存界面显示
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void repDisplay(void);
-
 /*******************************************************
 * 函数功能：EEPROM信息初始化
 * 函数参数：
@@ -126,6 +99,13 @@ void repDisplay(void);
 *			struct eepromMsg*res：初始化完成的EEPROM信息结构体
 *********************************************************/
 struct eepromMsg*eepromInit(int count,unsigned char price);
+
+/*************************************
+* 函数功能：界面显示
+* 函数参数：无
+* 函数返回值：无
+*************************************/
+void display(void);
 
 #endif
 

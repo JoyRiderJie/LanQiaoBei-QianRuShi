@@ -1,33 +1,25 @@
 #include "config.h"
 
 //定义变量存储商品信息
-struct goods*goodsX;
-struct goods*goodsY;
+struct goods*goods[2];
 //记录EEPROM的值
-struct eepromMsg*eepromMsgX;
-struct eepromMsg*eepromMsgY;
+struct eepromMsg*eepromMsg[2];
 //记录按键的值
 unsigned char keyValue = 0;
-//记录定时器7的中断次数
-unsigned int uiTime7CountLED1 = 0;
-//记录定时器7的中断次数是否开始 0-停止 1-开始
-unsigned int uiTime7CountLED1Flag = 0;
-//记录定时器7的中断次数
-unsigned int uiTime7Count= 0;
-//记录定时器7的中断次数
-unsigned int uiTime7CountLED2 = 0;
-//记录定时器7的中断次数是否开始 0-停止 1-开始
-unsigned int uiTime7CountLED2Flag = 0;
+//记录定时器7的中断次数 数值说明：0-用于记录LED1的时间 1-用于记录LED2的时间  2-用于通用
+unsigned int uiTime7Count[3] = {0,0,0};
+//开始记录定时器7中断次数的标志 数值说明：0-暂停 1-开始  位置说明：0-记录LED1的时间标志 1-记录LED2的时间标志  2-通用标志
+unsigned int uiTime7CountFlag[3] = {0,0,1};
 //显示模式
 unsigned char displayMode = 0;
 //记录确定标志
 unsigned char checkFlag = 0;
-
 //记录串口接收到的值
-unsigned char cRxBuff[1] = {49};
+unsigned char cRxBuff[1] = {0};
+//用于判断上次接收到串口数据是否处理完成
 unsigned int iRxFlag = 0;
-
-
+//用于辅助写入或读取EEPROM的位置
+unsigned char ucEepromLocation[2] = {0,2}; 
 
 /*************************************
 * 函数功能：自定义的系统初始化函数
@@ -36,8 +28,11 @@ unsigned int iRxFlag = 0;
 *************************************/
 void sysInit(void)
 {
+	//记录EEPROM的0xa4 0xa5位置的值
 	unsigned char ucEdata[10] = {0,0};
-
+	//for循环遍历使用
+	int i;
+	
 	//LCD显示屏初始化
 	lcdInit();
 	//IIC初始化
@@ -49,41 +44,42 @@ void sysInit(void)
 	//打开定时器2通道2的PWM输出功能
 	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
 
-	//初始化商品信息
-	goodsX = goodsInit(10,1.0,0);
-	goodsY = goodsInit(10,1.0,0);
-	//EEPROM结构体初始化
-	eepromMsgX = eepromInit(0,0);
-	eepromMsgY = eepromInit(0,0);
+	for(i=0;i<2;i++)
+	{
+		//初始化商品信息
+		goods[i] = goodsInit(10,1.0,0);
+		//EEPROM结构体初始化
+		eepromMsg[i] = eepromInit(0,0);
+	}
 	
+	//读取EEPROM特定位置查看该设备是否启动过
 	ucEdata[0] = readEepromByBit(0xa4);
+	HAL_Delay(10);
 	ucEdata[1] = readEepromByBit(0xa5);
 	
 	//判断固定位置是否存储过信息  其表示的是该设备是否第一次烧入代码
 	if(ucEdata[0]==55 && ucEdata[1]==66) 
 	{
-		//加载EEPROM的数量、价格信息
-		eepromMsgX->count = readEepromByBit(0xa0);
-		goodsX->iGoodsCount = eepromMsgX->count;
-		HAL_Delay(10);
-		
-		eepromMsgX->price = readEepromByBit(0xa1)*1.0/10;
-		goodsX->dGoodsPrice = eepromMsgX->price;
-		HAL_Delay(10);	
-		
-		eepromMsgY->count = readEepromByBit(0xa2);
-		goodsY->iGoodsCount = eepromMsgY->count;
-		HAL_Delay(10);
-		
-		eepromMsgY->price = readEepromByBit(0xa3)*1.0/10;
-		goodsY->dGoodsPrice = eepromMsgY->price;
-		HAL_Delay(10);		
+		//加载EEPROM中商品的数量、价格信息
+		for(i=0;i<2;i++)
+		{
+			eepromMsg[i]->count = readEepromByBit(0xa0+ucEepromLocation[i]);
+			goods[i]->iGoodsCount = eepromMsg[i]->count;
+			HAL_Delay(10);
+			
+			eepromMsg[i]->price = readEepromByBit(0xa1+ucEepromLocation[i])*1.0/10;
+			goods[i]->dGoodsPrice = eepromMsg[i]->price;
+			HAL_Delay(10);	
+		}	
 	}
 	else
 	{
-		writeEepromByBit(0xa4,55);
-		HAL_Delay(10);
-		writeEepromByBit(0xa5,66);
+		//向EEPROM写入数据表明该设备已经启动过
+		for(i=0;i<2;i++)
+		{
+			writeEepromByBit(0xa4+i,55+11*i);
+			HAL_Delay(10);
+		}
 	}
 }
 
@@ -94,78 +90,106 @@ void sysInit(void)
 *************************************/
 void sysWork(void)
 {
-//	char temp[20] = {0};
+	//for循环遍历使用
+	int i=0;
 	
 	//按键工作
 	keyPro();
-	
-	if(goodsX->dGoodsPrice >=2.1)
-		goodsX->dGoodsPrice = 1.0;
-	else if(goodsX->dGoodsPrice < 1.0)
-		goodsX->dGoodsPrice = 2.0;
-	
-	if(goodsY->dGoodsPrice >=2.1)
-		goodsY->dGoodsPrice = 1.0;	
-	else if(goodsX->dGoodsPrice < 1.0)
-		goodsX->dGoodsPrice = 2.0;
-				
-	//购买界面
-	if(displayMode==0)
-		shopDisplay();
-	//商品价格界面
-	else if(displayMode==1)
-		priceDisplay();
-	//库存信息界面
-	else if(displayMode==2)
-		repDisplay();
+	//遍历判断数值是否符合要求
+	for(i=0;i<2;i++)
+		if(goods[i]->dGoodsPrice >=2.1)
+			goods[i]->dGoodsPrice = 1.0;
+		else if(goods[i]->dGoodsPrice < 1.0)
+			goods[i]->dGoodsPrice = 2.0;
+	//界面显示
+	display();
 	//串口数据处理
 	usartProcess();
 	//LED工作
 	LedDisplay();
 	//PWM工作
 	pwmWorkState();
-	
-	//判断库存数量是否跟EEPROM相同 不同就写入
-	if(goodsX->iGoodsCount != eepromMsgX->count && uiTime7Count%50==10)
-	{
-		writeEepromByBit(0xa0,(unsigned char)goodsX->iGoodsCount);
-		eepromMsgX->count = goodsX->iGoodsCount;
-	}
-	if(goodsX->dGoodsPrice != eepromMsgX->count && uiTime7Count%50==10)
-	{
-		writeEepromByBit(0xa1,(unsigned char)(goodsX->dGoodsPrice*10));
-		eepromMsgX->price = goodsX->dGoodsPrice*1.0/10;
-	}
-	
-	if(goodsY->iGoodsCount != eepromMsgY->count && uiTime7Count%50==30)
-	{
-		writeEepromByBit(0xa2,(unsigned char)goodsY->iGoodsCount);
-		eepromMsgY->count = goodsY->iGoodsCount;
-	}
-	if(goodsY->dGoodsPrice != eepromMsgY->price && uiTime7Count%50==40)
-	{
-		writeEepromByBit(0xa3,(unsigned char)(goodsY->dGoodsPrice*10));
-		eepromMsgY->price = goodsY->dGoodsPrice*1.0/10;
-	}
-	
+		
 	//商品确认购买
 	if(checkFlag)
 	{
-		//商品确认购买后库存减少
-		goodsX->iGoodsCount -= goodsX->iGoodsBuyCount;
-		goodsY->iGoodsCount -= goodsY->iGoodsBuyCount;
-		//清空刚才的交易信息
-		goodsX->iGoodsBuyCount = 0;
-		goodsY->iGoodsBuyCount = 0;
+		//商品确认购买后库存减少  清空刚才的交易信息
+		for(int i=0;i<2;i++)
+		{
+			goods[i]->iGoodsCount -= goods[i]->iGoodsBuyCount;
+			goods[i]->iGoodsBuyCount = 0;
+		}
 		//消除确认的标志位
 		checkFlag = 0;
 	}
-	
-//	//查看EEPROM中的数据
-//	sprintf(temp,"eXC:%d eXp%.2f",eepromMsgX->count,eepromMsgX->price);
-//	LCD_DisplayStringLine(Line8,(uint8_t*)temp);
-//	sprintf(temp,"eYC:%d eYp:%.2f",eepromMsgY->count,eepromMsgY->price);
-//	LCD_DisplayStringLine(Line9,(uint8_t*)temp);
+			
+	//判断库存数量是否跟EEPROM存储是否相同 不同就写入
+	for(i=0;i<2;i++)
+	{
+		if(goods[i]->iGoodsCount!=eepromMsg[i]->count && uiTime7Count[2]%5==(0+ucEepromLocation[i]))
+		{
+			writeEepromByBit(0xa0+ucEepromLocation[i],(unsigned char)goods[i]->iGoodsCount);
+			eepromMsg[i]->count = goods[i]->iGoodsCount;
+		}
+		if(goods[i]->dGoodsPrice!=eepromMsg[i]->price && uiTime7Count[2]%5==(1+ucEepromLocation[i]))
+		{
+			writeEepromByBit(0xa1+ucEepromLocation[i],(unsigned char)(goods[i]->dGoodsPrice*10));
+			eepromMsg[i]->price = goods[i]->dGoodsPrice;
+		}
+	}
+}
+
+/*************************************
+* 函数功能：按键工作函数
+* 函数参数：无
+* 函数返回值：无
+*************************************/
+void keyPro(void)
+{
+	//按键扫描
+	keyValue = scanKey();
+	switch(keyValue)
+	{
+		//按键B1
+		case 1:
+			//切换LCD显示界面
+			if(++displayMode == 3) displayMode = 0;
+			break;
+		//按键B2
+		case 2:
+			//购买界面  购买数量加1
+			if(displayMode == 0)
+				if(++goods[0]->iGoodsBuyCount == goods[0]->iGoodsCount+1)
+					goods[0]->iGoodsBuyCount = 0;
+			//商品价格界面  单价加0.1
+			if(displayMode == 1)
+				goods[0]->dGoodsPrice += 0.1;	
+			//库存界面  库存加1
+			if(displayMode == 2)
+				goods[0]->iGoodsCount++;
+			break;
+		//按键B3
+		case 3:
+			//购买界面  购买数量加1
+			if(displayMode == 0)
+				if(++goods[1]->iGoodsBuyCount == goods[1]->iGoodsCount+1)
+					goods[1]->iGoodsBuyCount = 0;
+			//商品价格界面  单价加0.1
+			if(displayMode == 1)
+				goods[1]->dGoodsPrice += 0.1;	
+			//库存界面  库存加1
+			if(displayMode == 2)
+				goods[1]->iGoodsCount++;
+			break;
+		//按键B4
+		case 4:
+			if(displayMode == 0)
+				checkFlag = 1;
+			break;
+		//其他
+		default : break;
+	}	
+	keyValue = 0;
 }
 
 /*******************************************************
@@ -208,60 +232,6 @@ struct goods*goodsInit(int iGoodsCount,double dGoodsPrice,int iGoodsBuyCount)
 	return goods;
 }
 
-
-/*************************************
-* 函数功能：按键工作函数
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void keyPro(void)
-{
-	//按键扫描
-	keyValue = scanKey();
-	switch(keyValue)
-	{
-		//按键B1
-		case 1:
-			//切换LCD显示界面
-			if(++displayMode == 3) displayMode = 0;
-			break;
-		//按键B2
-		case 2:
-			//购买界面  购买数量加1
-			if(displayMode == 0)
-				if(++goodsX->iGoodsBuyCount == goodsX->iGoodsCount+1)
-					goodsX->iGoodsBuyCount = 0;
-			//商品价格界面  单价加0.1
-			if(displayMode == 1)
-				goodsX->dGoodsPrice += 0.1;	
-			//库存界面  库存加1
-			if(displayMode == 2)
-				goodsX->iGoodsCount++;
-			break;
-		//按键B3
-		case 3:
-			//购买界面  购买数量加1
-			if(displayMode == 0)
-				if(++goodsY->iGoodsBuyCount == goodsY->iGoodsCount+1)
-					goodsY->iGoodsBuyCount = 0;
-			//商品价格界面  单价加0.1
-			if(displayMode == 1)
-				goodsY->dGoodsPrice += 0.1;	
-			//库存界面  库存加1
-			if(displayMode == 2)
-				goodsY->iGoodsCount++;
-			break;
-		//按键B4
-		case 4:
-			if(displayMode == 0)
-				checkFlag = 1;
-			break;
-		//其他
-		default :break;
-	}	
-	keyValue = 0;
-}
-
 /*************************************
 * 函数功能：按键工作函数
 * 函数参数：无
@@ -274,26 +244,28 @@ void LedDisplay(void)
 	//确认购买商品
 	if(checkFlag)
 	{
-		uiTime7CountLED1Flag = 1;
+		uiTime7CountFlag[0] = 1;
 	}
-	if(uiTime7CountLED1Flag &&  uiTime7CountLED1%50<50)
+	//判断LED时长是否符合条件
+	if(uiTime7CountFlag[0] &&  uiTime7Count[0]%50<50)
 		changeLedStateByLocation(LED1,1);
-	if(uiTime7CountLED1%55>51)
+	if(uiTime7Count[0]%55>51)
 	{
 		changeLedStateByLocation(LED1,0);
-		uiTime7CountLED1Flag = 0;
-		uiTime7CountLED1 = 0;
+		uiTime7CountFlag[0] = 0;
+		uiTime7Count[0] = 0;
 	}
 	
 	//商品数量都为0
-	if(!goodsX->iGoodsCount && !goodsY->iGoodsCount)
-		uiTime7CountLED2Flag = 1;
+	if(!goods[0]->iGoodsCount && !goods[1]->iGoodsCount)
+		uiTime7CountFlag[1] = 1;
 	else
 	{
-		uiTime7CountLED2Flag = 0;
-		uiTime7CountLED2 = 0;
+		uiTime7CountFlag[1] = 0;
+		uiTime7Count[1] = 0;
 	}
-	if(uiTime7CountLED2%2 == 1)
+	//判断时间是否间隔0.1秒 
+	if(uiTime7Count[1]%2 == 1)
 		rollbackLedByLocation(LED2);
 }
 
@@ -303,17 +275,13 @@ void LedDisplay(void)
 * 函数返回值：无
 *************************************/
 void pwmWorkState(void)
-{
-	//输出占空比为30%
-	if(uiTime7CountLED1Flag && 0<uiTime7CountLED1%51 && uiTime7CountLED1%51<=51)
-	{
+{	
+	//输出占空比为30%  这里的判断条件是借用LED1的判断条件 因为他们的时长需求是一样的
+	if(uiTime7CountFlag[0] &&  uiTime7Count[0]%50<50)
 		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,30);
-	}
 	//输出占空比为5%
-	else
-	{
+	if(uiTime7Count[0]%55>51)
 		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,5);
-	}
 }
 
 /*************************************
@@ -328,15 +296,15 @@ void usartProcess(void)
 	//确认购买后发送商品信息
 	if(checkFlag)
 	{
-		sprintf(temp,"X:%d,Y:%d,Z:%.1f\r\n",goodsX->iGoodsBuyCount,goodsY->iGoodsBuyCount,
-				(goodsX->dGoodsPrice*goodsX->iGoodsBuyCount+goodsY->dGoodsPrice*goodsY->iGoodsBuyCount));
+		sprintf(temp,"X:%d,Y:%d,Z:%.1f\r\n",goods[0]->iGoodsBuyCount,goods[1]->iGoodsBuyCount,
+				(goods[0]->dGoodsPrice*goods[0]->iGoodsBuyCount+goods[1]->dGoodsPrice*goods[1]->iGoodsBuyCount));
 		HAL_UART_Transmit(&huart1,(uint8_t*)temp,sizeof(temp),50);
 	}
 	
 	//查询商品 发送目前的商品信息
 	if(iRxFlag==1 && strcmp((char*)cRxBuff,(char*)"?") == 0)
 	{
-		sprintf(temp,"X:%.1f,Y:%.1f\r\n",goodsX->dGoodsPrice,goodsY->dGoodsPrice);
+		sprintf(temp,"X:%.1f,Y:%.1f\r\n",goods[0]->dGoodsPrice,goods[1]->dGoodsPrice);
 		HAL_UART_Transmit(&huart1,(uint8_t*)temp,sizeof(temp),50);
 	}
 	//清空串口接收到的数据以及打开串口锁
@@ -345,47 +313,39 @@ void usartProcess(void)
 }
 
 /*************************************
-* 函数功能：商品购买界面显示
+* 函数功能：界面显示
 * 函数参数：无
 * 函数返回值：无
 *************************************/
-void shopDisplay(void)
+void display(void)
 {
 	char temp[20]  = {0};
-	LCD_DisplayStringLine(Line1,(uint8_t*)"        SHOP ");
-	sprintf(temp,"     X:%d       ",goodsX->iGoodsBuyCount);
-	LCD_DisplayStringLine(Line3,(uint8_t*)temp);
-	sprintf(temp,"     Y:%d       ",goodsY->iGoodsBuyCount);
-	LCD_DisplayStringLine(Line4,(uint8_t*)temp);
+	
+	//购买界面显示
+	if(displayMode == 0)
+	{
+		LCD_DisplayStringLine(Line1,(uint8_t*)"        SHOP ");
+		sprintf(temp,"     X:%d       ",goods[0]->iGoodsBuyCount);
+		LCD_DisplayStringLine(Line3,(uint8_t*)temp);
+		sprintf(temp,"     Y:%d       ",goods[1]->iGoodsBuyCount);
+		LCD_DisplayStringLine(Line4,(uint8_t*)temp);
+	}
+	//商品价格界面显示
+	else if(displayMode == 1)	
+	{
+		LCD_DisplayStringLine(Line1,(uint8_t*)"        PRICE   ");
+		sprintf(temp,"     X:%.1f    ",goods[0]->dGoodsPrice);
+		LCD_DisplayStringLine(Line3,(uint8_t*)temp);
+		sprintf(temp,"     Y:%.1f    ",goods[1]->dGoodsPrice);
+		LCD_DisplayStringLine(Line4,(uint8_t*)temp);
+	}
+	//库存信息界面显示
+	else if(displayMode == 2)
+	{
+		LCD_DisplayStringLine(Line1,(uint8_t*)"        REP   ");
+		sprintf(temp,"     X:%d      ",goods[0]->iGoodsCount);
+		LCD_DisplayStringLine(Line3,(uint8_t*)temp);
+		sprintf(temp,"     Y:%d       ",goods[1]->iGoodsCount);
+		LCD_DisplayStringLine(Line4,(uint8_t*)temp);
+	}
 }
-
-/*************************************
-* 函数功能：商品价格界面显示
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void priceDisplay(void)
-{
-	char temp[20]  = {0};
-	LCD_DisplayStringLine(Line1,(uint8_t*)"        PRICE   ");
-	sprintf(temp,"     X:%.1f    ",goodsX->dGoodsPrice);
-	LCD_DisplayStringLine(Line3,(uint8_t*)temp);
-	sprintf(temp,"     Y:%.1f    ",goodsY->dGoodsPrice);
-	LCD_DisplayStringLine(Line4,(uint8_t*)temp);
-}
-
-/*************************************
-* 函数功能：商品库存界面显示
-* 函数参数：无
-* 函数返回值：无
-*************************************/
-void repDisplay(void)
-{
-	char temp[20]  = {0};
-	LCD_DisplayStringLine(Line1,(uint8_t*)"        REP   ");
-	sprintf(temp,"     X:%d      ",goodsX->iGoodsCount);
-	LCD_DisplayStringLine(Line3,(uint8_t*)temp);
-	sprintf(temp,"     Y:%d       ",goodsY->iGoodsCount);
-	LCD_DisplayStringLine(Line4,(uint8_t*)temp);
-}
-

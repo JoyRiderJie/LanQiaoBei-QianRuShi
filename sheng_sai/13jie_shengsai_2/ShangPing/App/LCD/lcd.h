@@ -152,7 +152,7 @@
 #define Line6          144
 #define Line7          168
 #define Line8          192
-#define Line9          216
+#define Line9          216 
 
 #define Horizontal     0x00
 #define Vertical       0x01
