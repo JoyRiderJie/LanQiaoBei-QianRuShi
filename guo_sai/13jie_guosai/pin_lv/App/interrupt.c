@@ -52,12 +52,3 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			LED3TimeFlag = 1;
 	}
 }
-/* USER CODE BEGIN 1 */
-int fputc(int ch, FILE *f)
-{
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffff);
-  return ch;
-}
-/* USER CODE END 1 */
-
-

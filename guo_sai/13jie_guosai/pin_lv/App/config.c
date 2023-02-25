@@ -23,6 +23,8 @@ int keyB4[2] = {0,0};
 int LCDMod = 0;
 uint8_t LED3TimeFlag = 0;
 
+extern void EnableDebugIRQ(void);
+
 /*************************************
 * 函数功能：自定义的系统初始化函数
 * 函数参数：无
@@ -58,6 +60,7 @@ void sysInit(void)
 	HAL_ADCEx_Calibration_Start(&hadc2,ADC_SINGLE_ENDED);	
 	// 关闭所有LED
 	changeAllLedByStateNumber(0);
+	
 }
 
 /*************************************

@@ -524,7 +524,6 @@ void LCD_WriteBMP(u32 BmpAddress)
 	LCD_WriteReg(R3, 0x1018);
 }
 
-#define LOCK 0
 /*******************************************************************************
 * Function Name  : LCD_WriteReg
 * Description    : Writes to the selected LCD register.
@@ -535,10 +534,8 @@ void LCD_WriteBMP(u32 BmpAddress)
 *******************************************************************************/
 void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
 {
-	#if LOCK == 0
 	// 保存目前GPIOC的值
 	uint16_t temp = GPIOC->ODR;
-	#endif
 	
 	GPIOB->BRR  |= GPIO_PIN_9;  	
 	GPIOB->BRR  |= GPIO_PIN_8;  	
@@ -560,10 +557,8 @@ void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
 	GPIOB->BSRR |= GPIO_PIN_5; 
 	GPIOB->BSRR |= GPIO_PIN_8; 
 	
-	#if LOCK == 0
 	// 恢复以前保存GPIOC的值
 	GPIOC->ODR = temp;
-	#endif
 }
 /*******************************************************************************
 * Function Name  : LCD_ReadReg
@@ -610,10 +605,8 @@ u16 LCD_ReadReg(u8 LCD_Reg)
 *******************************************************************************/
 void LCD_WriteRAM_Prepare(void)
 { 
-	#if LOCK == 0
 	// 保存目前GPIOC的值
 	u16 temp = GPIOC->ODR;
-	#endif
 	
 	GPIOB->BRR  |=  GPIO_PIN_9;  
 	GPIOB->BRR  |=  GPIO_PIN_8; 
@@ -631,10 +624,8 @@ void LCD_WriteRAM_Prepare(void)
 	__nop();  
 	GPIOB->BSRR |=  GPIO_PIN_9; 
 	
-	#if LOCK == 0
 	// 恢复以前保存GPIOC的值
 	GPIOC->ODR = temp;
-	#endif
 }
 /*******************************************************************************
 * Function Name  : LCD_WriteRAM
@@ -645,10 +636,8 @@ void LCD_WriteRAM_Prepare(void)
 *******************************************************************************/
 void LCD_WriteRAM(u16 RGB_Code)
 {
-	#if LOCK == 0
 	// 保存目前GPIOC的值
 	u16 temp = GPIOC->ODR;
-	#endif
 	
 	GPIOB->BRR  |=  GPIO_PIN_9;  
 	GPIOB->BSRR |=  GPIO_PIN_8; 
@@ -666,10 +655,8 @@ void LCD_WriteRAM(u16 RGB_Code)
 	__nop();
 	GPIOB->BSRR |=  GPIO_PIN_9; 
 
-	#if LOCK == 0
 	// 恢复以前保存GPIOC的值
 	GPIOC->ODR = temp;
-	#endif
 }
 /*******************************************************************************
 * Function Name  : LCD_ReadRAM

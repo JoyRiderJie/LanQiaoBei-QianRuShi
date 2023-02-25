@@ -33,4 +33,3 @@ parkingmanagementsystem\key.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal
 parkingmanagementsystem\key.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 parkingmanagementsystem\key.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 parkingmanagementsystem\key.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
-parkingmanagementsystem\key.o: ../Inc/usart.h
