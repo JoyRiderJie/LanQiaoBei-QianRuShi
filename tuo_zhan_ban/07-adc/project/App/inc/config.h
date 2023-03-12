@@ -9,8 +9,9 @@
 #include "stdio.h"
 //#include "R47.h"
 #include "lis302dl.h"
+#include  "myAdc.h"
 
-//extern ADC_HandleTypeDef hadc2;
+extern ADC_HandleTypeDef hadc2;
 
 /*****************************************************************
 * @sysWork：项目的主要功能初始化函数

@@ -1,6 +1,8 @@
 #include "config.h"
 
 
+
+
 /*****************************************************************
 * @sysWork：项目的主要功能初始化函数
 * @arg:
@@ -12,6 +14,7 @@ void sysInit(void)
 {
     // LCD初始化
     lcdInit();
+#if 0
     // DHT11初始化
     while(DHT11_Init())
     {
@@ -19,8 +22,11 @@ void sysInit(void)
         HAL_Delay(200);
     }
     LCD_DisplayStringLine(Line0, (uint8_t *)"  DHT11 OK          ");
+#endif
+#if 0
     // LIS392DL初始化 或者说是 IIC初始化
     lis302dlInit();
+#endif
 }
 
 /*****************************************************************
@@ -76,7 +82,7 @@ void sysWork(void)
 #endif
 
 // 三轴加速度传感器LIS302DL的测试
-#if 1
+#if 0
     lis302dlOutput(alz);
     snprintf((char *)txt, sizeof(txt), "  X acclr:%.2fg   ", alz[0]);
     LCD_DisplayStringLine(Line6, (uint8_t*)txt);
@@ -84,6 +90,16 @@ void sysWork(void)
     LCD_DisplayStringLine(Line7, (uint8_t*)txt);
     snprintf((char *)txt, sizeof(txt), "  Z acclr:%.2fg   ", alz[2]);
     LCD_DisplayStringLine(Line8, (uint8_t*)txt);
+#endif
+
+// ADC测试
+#if 1
+	float adcData[2] ;
+    LCD_DisplayStringLine(Line7,(uint8_t*)"  ADC test");
+	adcData[0] = getADC_RPx(&hadc2,ADC_CHANNEL_13);
+	adcData[1] = getADC_RPx(&hadc2,ADC_CHANNEL_17);
+	sprintf(txt," PB5:%.2f PB6:%.2f ",adcData[0],adcData[1]);
+    LCD_DisplayStringLine(Line8,(uint8_t*)txt);
 #endif
 
     HAL_Delay(500);
