@@ -60,7 +60,6 @@ void sysInit(void)
 	HAL_ADCEx_Calibration_Start(&hadc2,ADC_SINGLE_ENDED);	
 	// ¹Ø±ÕËùÓÐLED
 	changeAllLedByStateNumber(0);
-	
 }
 
 /*************************************
@@ -74,7 +73,6 @@ void sysWork(void)
 	keyPro();
 	displayText(systemMode%3);
 	ledPro((data[0]>data[1]*para[1]) && LED3TimeFlag,LCDMod);
-
 }
 
 /***************************************************
