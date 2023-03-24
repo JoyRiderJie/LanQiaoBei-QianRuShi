@@ -26,14 +26,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		temp = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_2);
 		//将定时器的计数值设置成0
 		__HAL_TIM_SetCounter(htim,0);
-		//计算频率
-		P1 = (80000000/80)/temp;
 		//频率<100时 钳制在100
-		if(1000000/P1>10000)
-			P1=100;
+		if(P1 < 100)
+			P1 = 100;
 		//频率>10k时 钳制在10k
-		else if(1000000/P1<100)
-			P1=10000;
+		else if(P1 > 10000)
+			P1 = 10000;
 		//重新开启定时器
 		HAL_TIM_IC_Start_IT(htim,TIM_CHANNEL_2);
 	}
