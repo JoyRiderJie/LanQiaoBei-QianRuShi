@@ -9,9 +9,9 @@ extern RTC_HandleTypeDef hrtc;
 
 // 是否发生RTC中断
 uint16_t RTCFlag = 0;
-
+u8 sEnterCnt = 0;
 //设置闹钟,记得写中断回调函数
-static void setalarm(uint32_t alarmName,int hours,int minutes,int seconds)
+static void setalarm(int hours,int minutes,int seconds)
 {
 	RTC_AlarmTypeDef sAlarm ;
 	
@@ -19,12 +19,18 @@ static void setalarm(uint32_t alarmName,int hours,int minutes,int seconds)
 //	sAlarm.Alarm = alarmName;
 	sAlarm.AlarmTime.Hours = hours;
 	sAlarm.AlarmTime.Minutes = minutes;
-	sAlarm.AlarmTime.Seconds = seconds;
+	sAlarm.AlarmTime.Seconds = seconds;	
+	sAlarm.AlarmTime.SubSeconds = 0x0;
+	sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
+	sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
+	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
+	sAlarm.AlarmDateWeekDay = 0x00;
 	sAlarm.Alarm = RTC_ALARM_A;
 	
 	//重置中断
 	HAL_RTC_SetAlarm_IT(&hrtc,&sAlarm, RTC_FORMAT_BIN);
-	__HAL_RTC_ALARMA_ENABLE(&hrtc);
+//    __HAL_RTC_ALARM_EXTI_CLEAR_IT();
+	rollbackLedByLocation(LED2);
 }
 
 /* -------------------------------- begin  -------------------------------- */
@@ -49,8 +55,8 @@ void sysInit(void)
 	
 	// 关闭所有的LED
 	changeAllLedByStateNumber(0);
-	
-	__HAL_RTC_ALARMA_ENABLE(&hrtc);
+//	
+//	__HAL_RTC_ALARMA_ENABLE(&hrtc);
 	
 }
 
@@ -72,7 +78,6 @@ void sysInit(void)
 void sysWork(void)
 {
 	char temp[50];
-	static u8 sEnterCnt = 0;
 	
 	HAL_RTC_GetTime(&hrtc,&myTime,RTC_FORMAT_BIN);
 	HAL_RTC_GetDate(&hrtc,&myDate,RTC_FORMAT_BIN);
@@ -84,29 +89,29 @@ void sysWork(void)
 	if(RTCFlag == 1)
 	{
 		RTCFlag = 0;
-		rollbackLedByLocation(LED2);
-		sprintf((char *)temp, "count:%d",++sEnterCnt);
-		LCD_DisplayStringLine(Line6,(uint8_t*)temp);
-		setalarm(RTC_ALARM_A,20,20,30);//myTime.Hours,myTime.Minutes,myTime.Seconds+3);
+//		sprintf((char *)temp, "count:%d",++sEnterCnt);
+//		LCD_DisplayStringLine(Line6,(uint8_t*)temp);
+//		setalarm(RTC_ALARM_A,myTime.Hours,myTime.Minutes,myTime.Seconds+3); // 20,20,30); //
 	}
 	
-//	if(sEnterCnt == 2)
-//	{
-//		myDate.Year = 22;
-//		myDate.Month = 12;
-//		myDate.Date = 12;
-//		myDate.WeekDay = 2;
-//		HAL_RTC_SetDate(&hrtc,&myDate,RTC_FORMAT_BIN);
-//	}
-//	if(sEnterCnt == 3)
-//	{
-//		myTime.Hours = 1;
-//		myTime.Minutes = 4;
-//		myTime.Seconds = 0;
-//		HAL_RTC_SetTime(&hrtc,&myTime,RTC_FORMAT_BIN);
-//	}
+	if(myTime.Seconds % 7 == 0)
+	{
+		myDate.Year = 22;
+		myDate.Month = 12;
+		myDate.Date = 12;
+		myDate.WeekDay = 1;
+		HAL_RTC_SetDate(&hrtc,&myDate,RTC_FORMAT_BIN);
+	}
+	if(sEnterCnt == 3)
+	{
+		myTime.Hours = 1;
+		myTime.Minutes = 4;
+		myTime.Seconds = 0;
+		HAL_RTC_SetTime(&hrtc,&myTime,RTC_FORMAT_BIN);
+	}
 	
 	
+	rollbackLedByLocation(LED1);
 	HAL_Delay(1000);
 }
 
@@ -116,7 +121,11 @@ void sysWork(void)
   * @param  hrtc : RTC handle
   * @retval None
   */
-void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc1) 
 {
+	char temp[20];
 	RTCFlag = 1;
+//	sprintf((char *)temp, "count:%d",++sEnterCnt);
+//	LCD_DisplayStringLine(Line6,(uint8_t*)temp);
+//	setalarm(23,59,8); 
 }

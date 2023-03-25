@@ -34,6 +34,9 @@ Section Cross References
     main.o(i.main) refers to rtc.o(i.MX_RTC_Init) for MX_RTC_Init
     main.o(i.main) refers to config.o(i.sysInit) for sysInit
     main.o(i.main) refers to config.o(i.sysWork) for sysWork
+    gpio.o(i.MX_GPIO_Init) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
+    gpio.o(i.MX_GPIO_Init) refers to stm32g4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
+    gpio.o(i.MX_GPIO_Init) refers to stm32g4xx_hal_gpio.o(i.HAL_GPIO_Init) for HAL_GPIO_Init
     rtc.o(i.HAL_RTC_MspDeInit) refers to stm32g4xx_hal_cortex.o(i.HAL_NVIC_DisableIRQ) for HAL_NVIC_DisableIRQ
     rtc.o(i.HAL_RTC_MspInit) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
     rtc.o(i.HAL_RTC_MspInit) refers to stm32g4xx_hal_rcc_ex.o(i.HAL_RCCEx_PeriphCLKConfig) for HAL_RCCEx_PeriphCLKConfig
@@ -208,6 +211,24 @@ Section Cross References
     stm32g4xx_hal_cortex.o(i.HAL_SYSTICK_IRQHandler) refers to stm32g4xx_hal_cortex.o(i.HAL_SYSTICK_Callback) for HAL_SYSTICK_Callback
     system_stm32g4xx.o(i.SystemCoreClockUpdate) refers to system_stm32g4xx.o(.data) for .data
     system_stm32g4xx.o(i.SystemCoreClockUpdate) refers to system_stm32g4xx.o(.constdata) for .constdata
+    config.o(i.HAL_RTC_AlarmAEventCallback) refers to config.o(.data) for .data
+    config.o(i.sysInit) refers to lcd.o(i.lcdInit) for lcdInit
+    config.o(i.sysInit) refers to led.o(i.changeAllLedByStateNumber) for changeAllLedByStateNumber
+    config.o(i.sysWork) refers to _printf_pad.o(.text) for _printf_pre_padding
+    config.o(i.sysWork) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
+    config.o(i.sysWork) refers to _printf_d.o(.ARM.Collect$$_printf_percent$$00000009) for _printf_d
+    config.o(i.sysWork) refers to _printf_dec.o(.text) for _printf_int_dec
+    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_GetTime) for HAL_RTC_GetTime
+    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_GetDate) for HAL_RTC_GetDate
+    config.o(i.sysWork) refers to noretval__2sprintf.o(.text) for __2sprintf
+    config.o(i.sysWork) refers to lcd.o(i.LCD_DisplayStringLine) for LCD_DisplayStringLine
+    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_SetDate) for HAL_RTC_SetDate
+    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_SetTime) for HAL_RTC_SetTime
+    config.o(i.sysWork) refers to led.o(i.rollbackLedByLocation) for rollbackLedByLocation
+    config.o(i.sysWork) refers to stm32g4xx_hal.o(i.HAL_Delay) for HAL_Delay
+    config.o(i.sysWork) refers to config.o(.bss) for .bss
+    config.o(i.sysWork) refers to rtc.o(.bss) for hrtc
+    config.o(i.sysWork) refers to config.o(.data) for .data
     lcd.o(i.LCD_BusIn) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
     lcd.o(i.LCD_BusIn) refers to stm32g4xx_hal_gpio.o(i.HAL_GPIO_Init) for HAL_GPIO_Init
     lcd.o(i.LCD_BusOut) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
@@ -279,24 +300,6 @@ Section Cross References
     led.o(i.ledInit) refers to led.o(i.changeAllLedByStateNumber) for changeAllLedByStateNumber
     led.o(i.rollbackLedByLocation) refers to stm32g4xx_hal_gpio.o(i.HAL_GPIO_TogglePin) for HAL_GPIO_TogglePin
     led.o(i.rollbackLedByLocation) refers to stm32g4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
-    config.o(i.HAL_RTC_AlarmAEventCallback) refers to config.o(.data) for .data
-    config.o(i.sysInit) refers to lcd.o(i.lcdInit) for lcdInit
-    config.o(i.sysInit) refers to led.o(i.changeAllLedByStateNumber) for changeAllLedByStateNumber
-    config.o(i.sysInit) refers to rtc.o(.bss) for hrtc
-    config.o(i.sysWork) refers to _printf_pad.o(.text) for _printf_pre_padding
-    config.o(i.sysWork) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
-    config.o(i.sysWork) refers to _printf_d.o(.ARM.Collect$$_printf_percent$$00000009) for _printf_d
-    config.o(i.sysWork) refers to _printf_dec.o(.text) for _printf_int_dec
-    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_GetTime) for HAL_RTC_GetTime
-    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_GetDate) for HAL_RTC_GetDate
-    config.o(i.sysWork) refers to noretval__2sprintf.o(.text) for __2sprintf
-    config.o(i.sysWork) refers to lcd.o(i.LCD_DisplayStringLine) for LCD_DisplayStringLine
-    config.o(i.sysWork) refers to led.o(i.rollbackLedByLocation) for rollbackLedByLocation
-    config.o(i.sysWork) refers to stm32g4xx_hal_rtc.o(i.HAL_RTC_SetAlarm_IT) for HAL_RTC_SetAlarm_IT
-    config.o(i.sysWork) refers to stm32g4xx_hal.o(i.HAL_Delay) for HAL_Delay
-    config.o(i.sysWork) refers to config.o(.bss) for .bss
-    config.o(i.sysWork) refers to rtc.o(.bss) for hrtc
-    config.o(i.sysWork) refers to config.o(.data) for .data
     __2sprintf.o(.text) refers to _printf_char_common.o(.text) for _printf_char_common
     __2sprintf.o(.text) refers to _sputc.o(.text) for _sputc
     noretval__2sprintf.o(.text) refers to _printf_char_common.o(.text) for _printf_char_common
@@ -745,6 +748,9 @@ Removing Unused input sections from the image.
     Removing system_stm32g4xx.o(.rrx_text), (6 bytes).
     Removing system_stm32g4xx.o(i.SystemCoreClockUpdate), (128 bytes).
     Removing system_stm32g4xx.o(.constdata), (8 bytes).
+    Removing config.o(.rev16_text), (4 bytes).
+    Removing config.o(.revsh_text), (4 bytes).
+    Removing config.o(.rrx_text), (6 bytes).
     Removing lcd.o(.rev16_text), (4 bytes).
     Removing lcd.o(.revsh_text), (4 bytes).
     Removing lcd.o(.rrx_text), (6 bytes).
@@ -768,9 +774,6 @@ Removing Unused input sections from the image.
     Removing led.o(.rrx_text), (6 bytes).
     Removing led.o(i.changeLedStateByLocation), (56 bytes).
     Removing led.o(i.ledInit), (120 bytes).
-    Removing config.o(.rev16_text), (4 bytes).
-    Removing config.o(.revsh_text), (4 bytes).
-    Removing config.o(.rrx_text), (6 bytes).
 
 342 unused section(s) (total 16590 bytes) removed from the image.
 
@@ -823,9 +826,9 @@ Image Symbol Table
     ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
@@ -838,25 +841,25 @@ Image Symbol Table
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memclr_w.o ABSOLUTE
     ../clib/misc.s                           0x00000000   Number         0  printf_stubs.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_ss_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_wp.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_wp.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_ss.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_flags.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_dec.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _sputc.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_intcommon.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __2sprintf.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_nopercent.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  noretval__2sprintf.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  _printf_char_common.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __2sprintf.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_intcommon.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _sputc.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  noretval__2sprintf.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_pad.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_ss_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_pad.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_dec.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_flags.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_nopercent.o ABSOLUTE
+    ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent_end.o ABSOLUTE
     ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent.o ABSOLUTE
     ../clib/printf_percent.s                 0x00000000   Number         0  _printf_d.o ABSOLUTE
-    ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent_end.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
@@ -1021,44 +1024,43 @@ Image Symbol Table
     i.LCD_WriteRAM_Prepare                   0x08001c30   Section        0  lcd.o(i.LCD_WriteRAM_Prepare)
     i.LCD_WriteReg                           0x08001c94   Section        0  lcd.o(i.LCD_WriteReg)
     i.MX_GPIO_Init                           0x08001d08   Section        0  gpio.o(i.MX_GPIO_Init)
-    i.MX_RTC_Init                            0x08001d34   Section        0  rtc.o(i.MX_RTC_Init)
-    i.MemManage_Handler                      0x08001e00   Section        0  stm32g4xx_it.o(i.MemManage_Handler)
-    i.NMI_Handler                            0x08001e02   Section        0  stm32g4xx_it.o(i.NMI_Handler)
-    i.PendSV_Handler                         0x08001e04   Section        0  stm32g4xx_it.o(i.PendSV_Handler)
-    i.REG_8230_Init                          0x08001e06   Section        0  lcd.o(i.REG_8230_Init)
-    i.REG_932X_Init                          0x08001f18   Section        0  lcd.o(i.REG_932X_Init)
-    i.RTC_Alarm_IRQHandler                   0x0800211c   Section        0  stm32g4xx_it.o(i.RTC_Alarm_IRQHandler)
-    i.RTC_Bcd2ToByte                         0x08002128   Section        0  stm32g4xx_hal_rtc.o(i.RTC_Bcd2ToByte)
-    i.RTC_ByteToBcd2                         0x0800213a   Section        0  stm32g4xx_hal_rtc.o(i.RTC_ByteToBcd2)
-    i.RTC_EnterInitMode                      0x08002154   Section        0  stm32g4xx_hal_rtc.o(i.RTC_EnterInitMode)
-    i.RTC_ExitInitMode                       0x0800219e   Section        0  stm32g4xx_hal_rtc.o(i.RTC_ExitInitMode)
-    i.SVC_Handler                            0x080021ee   Section        0  stm32g4xx_it.o(i.SVC_Handler)
-    i.SysTick_Handler                        0x080021f0   Section        0  stm32g4xx_it.o(i.SysTick_Handler)
-    i.SystemClock_Config                     0x080021f4   Section        0  main.o(i.SystemClock_Config)
-    i.SystemInit                             0x0800225c   Section        0  system_stm32g4xx.o(i.SystemInit)
-    i.UsageFault_Handler                     0x0800226c   Section        0  stm32g4xx_it.o(i.UsageFault_Handler)
-    i.__NVIC_SetPriority                     0x0800226e   Section        0  stm32g4xx_hal_cortex.o(i.__NVIC_SetPriority)
-    __NVIC_SetPriority                       0x0800226f   Thumb Code    32  stm32g4xx_hal_cortex.o(i.__NVIC_SetPriority)
-    i._is_digit                              0x0800228e   Section        0  __printf_wp.o(i._is_digit)
-    i.changeAllLedByStateNumber              0x0800229c   Section        0  led.o(i.changeAllLedByStateNumber)
-    i.lcdInit                                0x080022d4   Section        0  lcd.o(i.lcdInit)
-    i.main                                   0x08002304   Section        0  main.o(i.main)
-    i.rollbackLedByLocation                  0x08002320   Section        0  led.o(i.rollbackLedByLocation)
-    i.sysInit                                0x0800234c   Section        0  config.o(i.sysInit)
-    i.sysWork                                0x0800236c   Section        0  config.o(i.sysWork)
-    x$fpl$fpinit                             0x0800246c   Section       10  fpinit.o(x$fpl$fpinit)
-    $v0                                      0x0800246c   Number         0  fpinit.o(x$fpl$fpinit)
-    .constdata                               0x08002476   Section       16  system_stm32g4xx.o(.constdata)
-    .constdata                               0x08002486   Section     4560  lcd.o(.constdata)
-    .constdata                               0x08003656   Section       17  __printf_flags_wp.o(.constdata)
-    maptable                                 0x08003656   Data          17  __printf_flags_wp.o(.constdata)
+    i.MX_RTC_Init                            0x08001d98   Section        0  rtc.o(i.MX_RTC_Init)
+    i.MemManage_Handler                      0x08001e64   Section        0  stm32g4xx_it.o(i.MemManage_Handler)
+    i.NMI_Handler                            0x08001e66   Section        0  stm32g4xx_it.o(i.NMI_Handler)
+    i.PendSV_Handler                         0x08001e68   Section        0  stm32g4xx_it.o(i.PendSV_Handler)
+    i.REG_8230_Init                          0x08001e6a   Section        0  lcd.o(i.REG_8230_Init)
+    i.REG_932X_Init                          0x08001f7c   Section        0  lcd.o(i.REG_932X_Init)
+    i.RTC_Alarm_IRQHandler                   0x08002180   Section        0  stm32g4xx_it.o(i.RTC_Alarm_IRQHandler)
+    i.RTC_Bcd2ToByte                         0x0800218c   Section        0  stm32g4xx_hal_rtc.o(i.RTC_Bcd2ToByte)
+    i.RTC_ByteToBcd2                         0x0800219e   Section        0  stm32g4xx_hal_rtc.o(i.RTC_ByteToBcd2)
+    i.RTC_EnterInitMode                      0x080021b8   Section        0  stm32g4xx_hal_rtc.o(i.RTC_EnterInitMode)
+    i.RTC_ExitInitMode                       0x08002202   Section        0  stm32g4xx_hal_rtc.o(i.RTC_ExitInitMode)
+    i.SVC_Handler                            0x08002252   Section        0  stm32g4xx_it.o(i.SVC_Handler)
+    i.SysTick_Handler                        0x08002254   Section        0  stm32g4xx_it.o(i.SysTick_Handler)
+    i.SystemClock_Config                     0x08002258   Section        0  main.o(i.SystemClock_Config)
+    i.SystemInit                             0x080022c0   Section        0  system_stm32g4xx.o(i.SystemInit)
+    i.UsageFault_Handler                     0x080022d0   Section        0  stm32g4xx_it.o(i.UsageFault_Handler)
+    i.__NVIC_SetPriority                     0x080022d2   Section        0  stm32g4xx_hal_cortex.o(i.__NVIC_SetPriority)
+    __NVIC_SetPriority                       0x080022d3   Thumb Code    32  stm32g4xx_hal_cortex.o(i.__NVIC_SetPriority)
+    i._is_digit                              0x080022f2   Section        0  __printf_wp.o(i._is_digit)
+    i.changeAllLedByStateNumber              0x08002300   Section        0  led.o(i.changeAllLedByStateNumber)
+    i.lcdInit                                0x08002338   Section        0  lcd.o(i.lcdInit)
+    i.main                                   0x08002368   Section        0  main.o(i.main)
+    i.rollbackLedByLocation                  0x08002384   Section        0  led.o(i.rollbackLedByLocation)
+    i.sysInit                                0x080023b0   Section        0  config.o(i.sysInit)
+    i.sysWork                                0x080023c0   Section        0  config.o(i.sysWork)
+    x$fpl$fpinit                             0x080024c4   Section       10  fpinit.o(x$fpl$fpinit)
+    $v0                                      0x080024c4   Number         0  fpinit.o(x$fpl$fpinit)
+    .constdata                               0x080024ce   Section       16  system_stm32g4xx.o(.constdata)
+    .constdata                               0x080024de   Section     4560  lcd.o(.constdata)
+    .constdata                               0x080036ae   Section       17  __printf_flags_wp.o(.constdata)
+    maptable                                 0x080036ae   Data          17  __printf_flags_wp.o(.constdata)
     .data                                    0x20000000   Section       12  stm32g4xx_hal.o(.data)
     .data                                    0x2000000c   Section        4  system_stm32g4xx.o(.data)
-    .data                                    0x20000010   Section        6  lcd.o(.data)
-    TextColor                                0x20000010   Data           2  lcd.o(.data)
-    BackColor                                0x20000012   Data           2  lcd.o(.data)
-    .data                                    0x20000016   Section        8  config.o(.data)
-    sEnterCnt                                0x20000016   Data           1  config.o(.data)
+    .data                                    0x20000010   Section        8  config.o(.data)
+    .data                                    0x20000018   Section        6  lcd.o(.data)
+    TextColor                                0x20000018   Data           2  lcd.o(.data)
+    BackColor                                0x2000001a   Data           2  lcd.o(.data)
     .bss                                     0x20000020   Section       40  rtc.o(.bss)
     .bss                                     0x20000048   Section       20  config.o(.bss)
     .bss                                     0x2000005c   Section       96  libspace.o(.bss)
@@ -1305,44 +1307,45 @@ Image Symbol Table
     LCD_WriteRAM                             0x08001bd1   Thumb Code    88  lcd.o(i.LCD_WriteRAM)
     LCD_WriteRAM_Prepare                     0x08001c31   Thumb Code    90  lcd.o(i.LCD_WriteRAM_Prepare)
     LCD_WriteReg                             0x08001c95   Thumb Code   106  lcd.o(i.LCD_WriteReg)
-    MX_GPIO_Init                             0x08001d09   Thumb Code    38  gpio.o(i.MX_GPIO_Init)
-    MX_RTC_Init                              0x08001d35   Thumb Code   194  rtc.o(i.MX_RTC_Init)
-    MemManage_Handler                        0x08001e01   Thumb Code     2  stm32g4xx_it.o(i.MemManage_Handler)
-    NMI_Handler                              0x08001e03   Thumb Code     2  stm32g4xx_it.o(i.NMI_Handler)
-    PendSV_Handler                           0x08001e05   Thumb Code     2  stm32g4xx_it.o(i.PendSV_Handler)
-    REG_8230_Init                            0x08001e07   Thumb Code   274  lcd.o(i.REG_8230_Init)
-    REG_932X_Init                            0x08001f19   Thumb Code   514  lcd.o(i.REG_932X_Init)
-    RTC_Alarm_IRQHandler                     0x0800211d   Thumb Code     6  stm32g4xx_it.o(i.RTC_Alarm_IRQHandler)
-    RTC_Bcd2ToByte                           0x08002129   Thumb Code    18  stm32g4xx_hal_rtc.o(i.RTC_Bcd2ToByte)
-    RTC_ByteToBcd2                           0x0800213b   Thumb Code    24  stm32g4xx_hal_rtc.o(i.RTC_ByteToBcd2)
-    RTC_EnterInitMode                        0x08002155   Thumb Code    74  stm32g4xx_hal_rtc.o(i.RTC_EnterInitMode)
-    RTC_ExitInitMode                         0x0800219f   Thumb Code    80  stm32g4xx_hal_rtc.o(i.RTC_ExitInitMode)
-    SVC_Handler                              0x080021ef   Thumb Code     2  stm32g4xx_it.o(i.SVC_Handler)
-    SysTick_Handler                          0x080021f1   Thumb Code     4  stm32g4xx_it.o(i.SysTick_Handler)
-    SystemClock_Config                       0x080021f5   Thumb Code   102  main.o(i.SystemClock_Config)
-    SystemInit                               0x0800225d   Thumb Code    12  system_stm32g4xx.o(i.SystemInit)
-    UsageFault_Handler                       0x0800226d   Thumb Code     2  stm32g4xx_it.o(i.UsageFault_Handler)
-    _is_digit                                0x0800228f   Thumb Code    14  __printf_wp.o(i._is_digit)
-    changeAllLedByStateNumber                0x0800229d   Thumb Code    48  led.o(i.changeAllLedByStateNumber)
-    lcdInit                                  0x080022d5   Thumb Code    42  lcd.o(i.lcdInit)
-    main                                     0x08002305   Thumb Code    26  main.o(i.main)
-    rollbackLedByLocation                    0x08002321   Thumb Code    36  led.o(i.rollbackLedByLocation)
-    sysInit                                  0x0800234d   Thumb Code    26  config.o(i.sysInit)
-    sysWork                                  0x0800236d   Thumb Code   182  config.o(i.sysWork)
-    _fp_init                                 0x0800246d   Thumb Code    10  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x08002475   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x08002475   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    AHBPrescTable                            0x08002476   Data          16  system_stm32g4xx.o(.constdata)
-    ASCII_Table                              0x08002486   Data        4560  lcd.o(.constdata)
-    Region$$Table$$Base                      0x08003668   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08003688   Number         0  anon$$obj.o(Region$$Table)
+    MX_GPIO_Init                             0x08001d09   Thumb Code   132  gpio.o(i.MX_GPIO_Init)
+    MX_RTC_Init                              0x08001d99   Thumb Code   196  rtc.o(i.MX_RTC_Init)
+    MemManage_Handler                        0x08001e65   Thumb Code     2  stm32g4xx_it.o(i.MemManage_Handler)
+    NMI_Handler                              0x08001e67   Thumb Code     2  stm32g4xx_it.o(i.NMI_Handler)
+    PendSV_Handler                           0x08001e69   Thumb Code     2  stm32g4xx_it.o(i.PendSV_Handler)
+    REG_8230_Init                            0x08001e6b   Thumb Code   274  lcd.o(i.REG_8230_Init)
+    REG_932X_Init                            0x08001f7d   Thumb Code   514  lcd.o(i.REG_932X_Init)
+    RTC_Alarm_IRQHandler                     0x08002181   Thumb Code     6  stm32g4xx_it.o(i.RTC_Alarm_IRQHandler)
+    RTC_Bcd2ToByte                           0x0800218d   Thumb Code    18  stm32g4xx_hal_rtc.o(i.RTC_Bcd2ToByte)
+    RTC_ByteToBcd2                           0x0800219f   Thumb Code    24  stm32g4xx_hal_rtc.o(i.RTC_ByteToBcd2)
+    RTC_EnterInitMode                        0x080021b9   Thumb Code    74  stm32g4xx_hal_rtc.o(i.RTC_EnterInitMode)
+    RTC_ExitInitMode                         0x08002203   Thumb Code    80  stm32g4xx_hal_rtc.o(i.RTC_ExitInitMode)
+    SVC_Handler                              0x08002253   Thumb Code     2  stm32g4xx_it.o(i.SVC_Handler)
+    SysTick_Handler                          0x08002255   Thumb Code     4  stm32g4xx_it.o(i.SysTick_Handler)
+    SystemClock_Config                       0x08002259   Thumb Code   102  main.o(i.SystemClock_Config)
+    SystemInit                               0x080022c1   Thumb Code    12  system_stm32g4xx.o(i.SystemInit)
+    UsageFault_Handler                       0x080022d1   Thumb Code     2  stm32g4xx_it.o(i.UsageFault_Handler)
+    _is_digit                                0x080022f3   Thumb Code    14  __printf_wp.o(i._is_digit)
+    changeAllLedByStateNumber                0x08002301   Thumb Code    48  led.o(i.changeAllLedByStateNumber)
+    lcdInit                                  0x08002339   Thumb Code    42  lcd.o(i.lcdInit)
+    main                                     0x08002369   Thumb Code    26  main.o(i.main)
+    rollbackLedByLocation                    0x08002385   Thumb Code    36  led.o(i.rollbackLedByLocation)
+    sysInit                                  0x080023b1   Thumb Code    16  config.o(i.sysInit)
+    sysWork                                  0x080023c1   Thumb Code   198  config.o(i.sysWork)
+    _fp_init                                 0x080024c5   Thumb Code    10  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x080024cd   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x080024cd   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    AHBPrescTable                            0x080024ce   Data          16  system_stm32g4xx.o(.constdata)
+    ASCII_Table                              0x080024de   Data        4560  lcd.o(.constdata)
+    Region$$Table$$Base                      0x080036c0   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080036e0   Number         0  anon$$obj.o(Region$$Table)
     uwTickPrio                               0x20000000   Data           4  stm32g4xx_hal.o(.data)
     uwTickFreq                               0x20000004   Data           4  stm32g4xx_hal.o(.data)
     uwTick                                   0x20000008   Data           4  stm32g4xx_hal.o(.data)
     SystemCoreClock                          0x2000000c   Data           4  system_stm32g4xx.o(.data)
-    dummy                                    0x20000014   Data           2  lcd.o(.data)
-    RTCFlag                                  0x20000018   Data           2  config.o(.data)
-    myDate                                   0x2000001a   Data           4  config.o(.data)
+    sEnterCnt                                0x20000010   Data           1  config.o(.data)
+    RTCFlag                                  0x20000012   Data           2  config.o(.data)
+    myDate                                   0x20000014   Data           4  config.o(.data)
+    dummy                                    0x2000001c   Data           2  lcd.o(.data)
     hrtc                                     0x20000020   Data          40  rtc.o(.bss)
     myTime                                   0x20000048   Data          20  config.o(.bss)
     __libspace_start                         0x2000005c   Data          96  libspace.o(.bss)
@@ -1356,9 +1359,9 @@ Memory Map of the image
 
   Image Entry point : 0x080001d9
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000036a8, Max: 0x00020000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00003700, Max: 0x00020000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00003688, Max: 0x00020000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000036e0, Max: 0x00020000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1433,7 +1436,7 @@ Memory Map of the image
     0x0800069e   0x0800069e   0x00000000   Code   RO         2781    .text               c_w.l(indicate_semi.o)
     0x0800069e   0x0800069e   0x00000002   Code   RO          233    i.BusFault_Handler  stm32g4xx_it.o
     0x080006a0   0x080006a0   0x00000002   Code   RO          234    i.DebugMon_Handler  stm32g4xx_it.o
-    0x080006a2   0x080006a2   0x0000001c   Code   RO         2343    i.Delay_LCD         lcd.o
+    0x080006a2   0x080006a2   0x0000001c   Code   RO         2384    i.Delay_LCD         lcd.o
     0x080006be   0x080006be   0x00000004   Code   RO           13    i.Error_Handler     main.o
     0x080006c2   0x080006c2   0x00000002   PAD
     0x080006c4   0x080006c4   0x00000024   Code   RO          801    i.HAL_Delay         stm32g4xx_hal.o
@@ -1459,7 +1462,7 @@ Memory Map of the image
     0x0800101c   0x0800101c   0x0000040c   Code   RO         1042    i.HAL_RCC_OscConfig  stm32g4xx_hal_rcc.o
     0x08001428   0x08001428   0x00000002   Code   RO          512    i.HAL_RTCEx_AlarmBEventCallback  stm32g4xx_hal_rtc_ex.o
     0x0800142a   0x0800142a   0x00000002   PAD
-    0x0800142c   0x0800142c   0x0000000c   Code   RO         2594    i.HAL_RTC_AlarmAEventCallback  config.o
+    0x0800142c   0x0800142c   0x0000000c   Code   RO         2343    i.HAL_RTC_AlarmAEventCallback  config.o
     0x08001438   0x08001438   0x00000044   Code   RO          340    i.HAL_RTC_AlarmIRQHandler  stm32g4xx_hal_rtc.o
     0x0800147c   0x0800147c   0x00000044   Code   RO          349    i.HAL_RTC_GetDate   stm32g4xx_hal_rtc.o
     0x080014c0   0x080014c0   0x00000054   Code   RO          351    i.HAL_RTC_GetTime   stm32g4xx_hal_rtc.o
@@ -1471,70 +1474,70 @@ Memory Map of the image
     0x080018f8   0x080018f8   0x00000036   Code   RO          360    i.HAL_RTC_WaitForSynchro  stm32g4xx_hal_rtc.o
     0x0800192e   0x0800192e   0x00000028   Code   RO         2150    i.HAL_SYSTICK_Config  stm32g4xx_hal_cortex.o
     0x08001956   0x08001956   0x00000002   Code   RO          235    i.HardFault_Handler  stm32g4xx_it.o
-    0x08001958   0x08001958   0x0000002c   Code   RO         2344    i.LCD_BusIn         lcd.o
-    0x08001984   0x08001984   0x00000030   Code   RO         2345    i.LCD_BusOut        lcd.o
-    0x080019b4   0x080019b4   0x00000024   Code   RO         2346    i.LCD_Clear         lcd.o
-    0x080019d8   0x080019d8   0x00000090   Code   RO         2348    i.LCD_CtrlLinesConfig  lcd.o
-    0x08001a68   0x08001a68   0x00000018   Code   RO         2349    i.LCD_DisplayChar   lcd.o
-    0x08001a80   0x08001a80   0x0000002a   Code   RO         2352    i.LCD_DisplayStringLine  lcd.o
+    0x08001958   0x08001958   0x0000002c   Code   RO         2385    i.LCD_BusIn         lcd.o
+    0x08001984   0x08001984   0x00000030   Code   RO         2386    i.LCD_BusOut        lcd.o
+    0x080019b4   0x080019b4   0x00000024   Code   RO         2387    i.LCD_Clear         lcd.o
+    0x080019d8   0x080019d8   0x00000090   Code   RO         2389    i.LCD_CtrlLinesConfig  lcd.o
+    0x08001a68   0x08001a68   0x00000018   Code   RO         2390    i.LCD_DisplayChar   lcd.o
+    0x08001a80   0x08001a80   0x0000002a   Code   RO         2393    i.LCD_DisplayStringLine  lcd.o
     0x08001aaa   0x08001aaa   0x00000002   PAD
-    0x08001aac   0x08001aac   0x00000058   Code   RO         2353    i.LCD_DrawChar      lcd.o
-    0x08001b04   0x08001b04   0x00000034   Code   RO         2359    i.LCD_Init          lcd.o
-    0x08001b38   0x08001b38   0x00000080   Code   RO         2362    i.LCD_ReadReg       lcd.o
-    0x08001bb8   0x08001bb8   0x00000018   Code   RO         2364    i.LCD_SetCursor     lcd.o
-    0x08001bd0   0x08001bd0   0x00000060   Code   RO         2369    i.LCD_WriteRAM      lcd.o
-    0x08001c30   0x08001c30   0x00000064   Code   RO         2370    i.LCD_WriteRAM_Prepare  lcd.o
-    0x08001c94   0x08001c94   0x00000074   Code   RO         2371    i.LCD_WriteReg      lcd.o
-    0x08001d08   0x08001d08   0x0000002c   Code   RO          167    i.MX_GPIO_Init      gpio.o
-    0x08001d34   0x08001d34   0x000000cc   Code   RO          193    i.MX_RTC_Init       rtc.o
-    0x08001e00   0x08001e00   0x00000002   Code   RO          236    i.MemManage_Handler  stm32g4xx_it.o
-    0x08001e02   0x08001e02   0x00000002   Code   RO          237    i.NMI_Handler       stm32g4xx_it.o
-    0x08001e04   0x08001e04   0x00000002   Code   RO          238    i.PendSV_Handler    stm32g4xx_it.o
-    0x08001e06   0x08001e06   0x00000112   Code   RO         2372    i.REG_8230_Init     lcd.o
-    0x08001f18   0x08001f18   0x00000202   Code   RO         2373    i.REG_932X_Init     lcd.o
-    0x0800211a   0x0800211a   0x00000002   PAD
-    0x0800211c   0x0800211c   0x0000000c   Code   RO          239    i.RTC_Alarm_IRQHandler  stm32g4xx_it.o
-    0x08002128   0x08002128   0x00000012   Code   RO          361    i.RTC_Bcd2ToByte    stm32g4xx_hal_rtc.o
-    0x0800213a   0x0800213a   0x00000018   Code   RO          362    i.RTC_ByteToBcd2    stm32g4xx_hal_rtc.o
-    0x08002152   0x08002152   0x00000002   PAD
-    0x08002154   0x08002154   0x0000004a   Code   RO          363    i.RTC_EnterInitMode  stm32g4xx_hal_rtc.o
-    0x0800219e   0x0800219e   0x00000050   Code   RO          364    i.RTC_ExitInitMode  stm32g4xx_hal_rtc.o
-    0x080021ee   0x080021ee   0x00000002   Code   RO          240    i.SVC_Handler       stm32g4xx_it.o
-    0x080021f0   0x080021f0   0x00000004   Code   RO          241    i.SysTick_Handler   stm32g4xx_it.o
-    0x080021f4   0x080021f4   0x00000066   Code   RO           14    i.SystemClock_Config  main.o
-    0x0800225a   0x0800225a   0x00000002   PAD
-    0x0800225c   0x0800225c   0x00000010   Code   RO         2306    i.SystemInit        system_stm32g4xx.o
-    0x0800226c   0x0800226c   0x00000002   Code   RO          242    i.UsageFault_Handler  stm32g4xx_it.o
-    0x0800226e   0x0800226e   0x00000020   Code   RO         2152    i.__NVIC_SetPriority  stm32g4xx_hal_cortex.o
-    0x0800228e   0x0800228e   0x0000000e   Code   RO         2654    i._is_digit         c_w.l(__printf_wp.o)
-    0x0800229c   0x0800229c   0x00000038   Code   RO         2552    i.changeAllLedByStateNumber  led.o
-    0x080022d4   0x080022d4   0x00000030   Code   RO         2374    i.lcdInit           lcd.o
-    0x08002304   0x08002304   0x0000001a   Code   RO           15    i.main              main.o
-    0x0800231e   0x0800231e   0x00000002   PAD
-    0x08002320   0x08002320   0x0000002c   Code   RO         2555    i.rollbackLedByLocation  led.o
-    0x0800234c   0x0800234c   0x00000020   Code   RO         2595    i.sysInit           config.o
-    0x0800236c   0x0800236c   0x00000100   Code   RO         2596    i.sysWork           config.o
-    0x0800246c   0x0800246c   0x0000000a   Code   RO         2766    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x08002476   0x08002476   0x00000010   Data   RO         2307    .constdata          system_stm32g4xx.o
-    0x08002486   0x08002486   0x000011d0   Data   RO         2375    .constdata          lcd.o
-    0x08003656   0x08003656   0x00000011   Data   RO         2657    .constdata          c_w.l(__printf_flags_wp.o)
-    0x08003667   0x08003667   0x00000001   PAD
-    0x08003668   0x08003668   0x00000020   Data   RO         2834    Region$$Table       anon$$obj.o
+    0x08001aac   0x08001aac   0x00000058   Code   RO         2394    i.LCD_DrawChar      lcd.o
+    0x08001b04   0x08001b04   0x00000034   Code   RO         2400    i.LCD_Init          lcd.o
+    0x08001b38   0x08001b38   0x00000080   Code   RO         2403    i.LCD_ReadReg       lcd.o
+    0x08001bb8   0x08001bb8   0x00000018   Code   RO         2405    i.LCD_SetCursor     lcd.o
+    0x08001bd0   0x08001bd0   0x00000060   Code   RO         2410    i.LCD_WriteRAM      lcd.o
+    0x08001c30   0x08001c30   0x00000064   Code   RO         2411    i.LCD_WriteRAM_Prepare  lcd.o
+    0x08001c94   0x08001c94   0x00000074   Code   RO         2412    i.LCD_WriteReg      lcd.o
+    0x08001d08   0x08001d08   0x00000090   Code   RO          167    i.MX_GPIO_Init      gpio.o
+    0x08001d98   0x08001d98   0x000000cc   Code   RO          193    i.MX_RTC_Init       rtc.o
+    0x08001e64   0x08001e64   0x00000002   Code   RO          236    i.MemManage_Handler  stm32g4xx_it.o
+    0x08001e66   0x08001e66   0x00000002   Code   RO          237    i.NMI_Handler       stm32g4xx_it.o
+    0x08001e68   0x08001e68   0x00000002   Code   RO          238    i.PendSV_Handler    stm32g4xx_it.o
+    0x08001e6a   0x08001e6a   0x00000112   Code   RO         2413    i.REG_8230_Init     lcd.o
+    0x08001f7c   0x08001f7c   0x00000202   Code   RO         2414    i.REG_932X_Init     lcd.o
+    0x0800217e   0x0800217e   0x00000002   PAD
+    0x08002180   0x08002180   0x0000000c   Code   RO          239    i.RTC_Alarm_IRQHandler  stm32g4xx_it.o
+    0x0800218c   0x0800218c   0x00000012   Code   RO          361    i.RTC_Bcd2ToByte    stm32g4xx_hal_rtc.o
+    0x0800219e   0x0800219e   0x00000018   Code   RO          362    i.RTC_ByteToBcd2    stm32g4xx_hal_rtc.o
+    0x080021b6   0x080021b6   0x00000002   PAD
+    0x080021b8   0x080021b8   0x0000004a   Code   RO          363    i.RTC_EnterInitMode  stm32g4xx_hal_rtc.o
+    0x08002202   0x08002202   0x00000050   Code   RO          364    i.RTC_ExitInitMode  stm32g4xx_hal_rtc.o
+    0x08002252   0x08002252   0x00000002   Code   RO          240    i.SVC_Handler       stm32g4xx_it.o
+    0x08002254   0x08002254   0x00000004   Code   RO          241    i.SysTick_Handler   stm32g4xx_it.o
+    0x08002258   0x08002258   0x00000066   Code   RO           14    i.SystemClock_Config  main.o
+    0x080022be   0x080022be   0x00000002   PAD
+    0x080022c0   0x080022c0   0x00000010   Code   RO         2306    i.SystemInit        system_stm32g4xx.o
+    0x080022d0   0x080022d0   0x00000002   Code   RO          242    i.UsageFault_Handler  stm32g4xx_it.o
+    0x080022d2   0x080022d2   0x00000020   Code   RO         2152    i.__NVIC_SetPriority  stm32g4xx_hal_cortex.o
+    0x080022f2   0x080022f2   0x0000000e   Code   RO         2654    i._is_digit         c_w.l(__printf_wp.o)
+    0x08002300   0x08002300   0x00000038   Code   RO         2593    i.changeAllLedByStateNumber  led.o
+    0x08002338   0x08002338   0x00000030   Code   RO         2415    i.lcdInit           lcd.o
+    0x08002368   0x08002368   0x0000001a   Code   RO           15    i.main              main.o
+    0x08002382   0x08002382   0x00000002   PAD
+    0x08002384   0x08002384   0x0000002c   Code   RO         2596    i.rollbackLedByLocation  led.o
+    0x080023b0   0x080023b0   0x00000010   Code   RO         2344    i.sysInit           config.o
+    0x080023c0   0x080023c0   0x00000104   Code   RO         2345    i.sysWork           config.o
+    0x080024c4   0x080024c4   0x0000000a   Code   RO         2766    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x080024ce   0x080024ce   0x00000010   Data   RO         2307    .constdata          system_stm32g4xx.o
+    0x080024de   0x080024de   0x000011d0   Data   RO         2416    .constdata          lcd.o
+    0x080036ae   0x080036ae   0x00000011   Data   RO         2657    .constdata          c_w.l(__printf_flags_wp.o)
+    0x080036bf   0x080036bf   0x00000001   PAD
+    0x080036c0   0x080036c0   0x00000020   Data   RO         2834    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08003688, Size: 0x000006c0, Max: 0x00008000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080036e0, Size: 0x000006c0, Max: 0x00008000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08003688   0x0000000c   Data   RW          829    .data               stm32g4xx_hal.o
-    0x2000000c   0x08003694   0x00000004   Data   RW         2309    .data               system_stm32g4xx.o
-    0x20000010   0x08003698   0x00000006   Data   RW         2376    .data               lcd.o
-    0x20000016   0x0800369e   0x00000008   Data   RW         2598    .data               config.o
-    0x2000001e   0x080036a6   0x00000002   PAD
+    0x20000000   0x080036e0   0x0000000c   Data   RW          829    .data               stm32g4xx_hal.o
+    0x2000000c   0x080036ec   0x00000004   Data   RW         2309    .data               system_stm32g4xx.o
+    0x20000010   0x080036f0   0x00000008   Data   RW         2347    .data               config.o
+    0x20000018   0x080036f8   0x00000006   Data   RW         2417    .data               lcd.o
+    0x2000001e   0x080036fe   0x00000002   PAD
     0x20000020        -       0x00000028   Zero   RW          194    .bss                rtc.o
-    0x20000048        -       0x00000014   Zero   RW         2597    .bss                config.o
+    0x20000048        -       0x00000014   Zero   RW         2346    .bss                config.o
     0x2000005c        -       0x00000060   Zero   RW         2708    .bss                c_w.l(libspace.o)
-    0x200000bc   0x080036a6   0x00000004   PAD
+    0x200000bc   0x080036fe   0x00000004   PAD
     0x200000c0        -       0x00000200   Zero   RW            2    HEAP                startup_stm32g431xx.o
     0x200002c0        -       0x00000400   Zero   RW            1    STACK               startup_stm32g431xx.o
 
@@ -1546,12 +1549,12 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       300         84          0          8         20       2457   config.o
-        44          6          0          0          0        835   gpio.o
+       288         66          0          8         20       2475   config.o
+       144         12          0          0          0        971   gpio.o
       1806         76       4560          6          0      11866   lcd.o
        100         16          0          0          0       1180   led.o
        132          0          0          0          0     576744   main.o
-       308         18          0          0         40       1895   rtc.o
+       308         16          0          0         40       1895   rtc.o
         64         26        472          0       1536        876   startup_stm32g431xx.o
        162         24          0         12          0       4537   stm32g4xx_hal.o
        198         14          0          0          0      34011   stm32g4xx_hal_cortex.o
@@ -1566,7 +1569,7 @@ Image component sizes
         16          4         16          4          0       1199   system_stm32g4xx.o
 
     ----------------------------------------------------------------------
-      7680        450       5080         32       1596     664690   Object Totals
+      7768        436       5080         32       1596     664844   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         20          0          0          2          0          0   (incl. Padding)
 
@@ -1629,15 +1632,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8862        498       5098         32       1696     659042   Grand Totals
-      8862        498       5098         32       1696     659042   ELF Image Totals
-      8862        498       5098         32          0          0   ROM Totals
+      8950        484       5098         32       1696     659096   Grand Totals
+      8950        484       5098         32       1696     659096   ELF Image Totals
+      8950        484       5098         32          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                13960 (  13.63kB)
+    Total RO  Size (Code + RO Data)                14048 (  13.72kB)
     Total RW  Size (RW Data + ZI Data)              1728 (   1.69kB)
-    Total ROM Size (Code + RO Data + RW Data)      13992 (  13.66kB)
+    Total ROM Size (Code + RO Data + RW Data)      14080 (  13.75kB)
 
 ==============================================================================
 

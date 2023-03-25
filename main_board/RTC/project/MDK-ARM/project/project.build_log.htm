@@ -28,10 +28,15 @@ Project File Date:  03/25/2023
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\keil\ARM\ARMCC\Bin'
 Build target 'project'
 compiling config.c...
+..\App\src\config.c(126): warning:  #177-D: variable "temp"  was declared but never referenced
+  	char temp[20];
+..\App\src\config.c(14): warning:  #177-D: function "setalarm"  was declared but never referenced
+  static void setalarm(int hours,int minutes,int seconds)
+..\App\src\config.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=8862 RO-data=5098 RW-data=32 ZI-data=1696  
+Program Size: Code=8950 RO-data=5098 RW-data=32 ZI-data=1696  
 FromELF: creating hex file...
-"project\project.axf" - 0 Error(s), 0 Warning(s).
+"project\project.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -54,7 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
