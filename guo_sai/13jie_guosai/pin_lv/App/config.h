@@ -28,7 +28,7 @@ struct paContent{
 };
 
 extern uint8_t ucRxbuff[4];
-extern uint8_t _ucRxbuff[1];
+extern uint8_t _ucRxbuff;
 extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim2,htim7,htim17;
 extern ADC_HandleTypeDef hadc2;

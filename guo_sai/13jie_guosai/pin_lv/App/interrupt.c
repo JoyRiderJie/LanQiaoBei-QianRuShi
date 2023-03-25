@@ -5,12 +5,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {	
 	if(huart->Instance == USART1){
 		// 重新使能中断
-		if(ucRxbuff[0]=='P' && _ucRxbuff[0]=='A') 
-			ucRxbuff[1] = _ucRxbuff[0];
-		else if((ucRxbuff[0]=='P' && ucRxbuff[1]=='A') && (_ucRxbuff[0]=='1' || _ucRxbuff[0]=='4' || _ucRxbuff[0]=='5'))
-			ucRxbuff[2] = _ucRxbuff[0];
+		if(ucRxbuff[0]=='P' && _ucRxbuff=='A') 
+			ucRxbuff[1] = _ucRxbuff;
+		else if((ucRxbuff[0]=='P' && ucRxbuff[1]=='A') && (_ucRxbuff=='1' || _ucRxbuff=='4' || _ucRxbuff=='5'))
+			ucRxbuff[2] = _ucRxbuff;
 		else
-			ucRxbuff[0] = _ucRxbuff[0];
+			ucRxbuff[0] = _ucRxbuff;
 		HAL_UART_Receive_IT(huart,(uint8_t *)&_ucRxbuff,sizeof(_ucRxbuff));
 	}
 }

@@ -1,8 +1,8 @@
 #include "config.h"
 
-//定义一个串口信息的结构体
+//定义一个串口信息的结构
 uint8_t ucRxbuff[4];
-uint8_t _ucRxbuff[1];
+uint8_t _ucRxbuff;
 
 //定义一个变量记录定时器7中断次数
 unsigned int uiTime7Count = 0;
