@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;     ../Drivers/STM32G4xx_HAL_Driver/Inc;     ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;     ../Drivers/CMSIS/Device/ST/STM32G4xx/Include;     ../Drivers/CMSIS/Include;     ..\App\inc</IncludePath>
+              <IncludePath>../Inc;       ../Drivers/STM32G4xx_HAL_Driver/Inc;       ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;       ../Drivers/CMSIS/Device/ST/STM32G4xx/Include;       ../Drivers/CMSIS/Include;       ..\App\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

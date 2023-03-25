@@ -45,7 +45,7 @@ void sysWork(void)
 	
 	temp = ds18b20Read();
 	DHT11_Read_Data(data);
-	sprintf(txt," temp:%.3f ",temp);
+	sprintf(txt," temp:%.3f             ",temp);
 	LCD_DisplayStringLine(Line1,(uint8_t*)txt);
 	if( data[0]!=0 || data[2]!=0 )
 	{
@@ -64,6 +64,6 @@ void sysWork(void)
 	else
 		LCD_DisplayStringLine(Line5, (uint8_t *)"  LOW     ");
 
-	HAL_Delay(500);
+//	HAL_Delay(500);
 }
 
