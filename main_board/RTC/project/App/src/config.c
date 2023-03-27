@@ -23,8 +23,8 @@ static void setalarm(int hours,int minutes,int seconds)
 	sAlarm.AlarmTime.SubSeconds = 0x0;
 	sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
 	sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
-	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-	sAlarm.AlarmDateWeekDay = 0x00;
+	sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY;
+	sAlarm.AlarmDateWeekDay = RTC_WEEKDAY_TUESDAY;
 	sAlarm.Alarm = RTC_ALARM_A;
 	
 	//重置中断
@@ -89,16 +89,17 @@ void sysWork(void)
 	if(RTCFlag == 1)
 	{
 		RTCFlag = 0;
-//		sprintf((char *)temp, "count:%d",++sEnterCnt);
-//		LCD_DisplayStringLine(Line6,(uint8_t*)temp);
-//		setalarm(RTC_ALARM_A,myTime.Hours,myTime.Minutes,myTime.Seconds+3); // 20,20,30); //
+		sprintf((char *)temp, "count:%d",++sEnterCnt);
+		LCD_DisplayStringLine(Line6,(uint8_t*)temp);
+//		setalarm(myTime.Hours,myTime.Minutes,myTime.Seconds+3); // 20,20,30); //
+		setalarm(0,0,5); // 20,20,30); //
 	}
 	
-	if(myTime.Seconds % 7 == 0)
+	if(myTime.Seconds % 7 == 100)
 	{
 		myDate.Year = 22;
 		myDate.Month = 12;
-		myDate.Date = 12;
+		myDate.Date = 25;
 		myDate.WeekDay = 1;
 		HAL_RTC_SetDate(&hrtc,&myDate,RTC_FORMAT_BIN);
 	}
@@ -123,9 +124,7 @@ void sysWork(void)
   */
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc1) 
 {
-	char temp[20];
 	RTCFlag = 1;
-//	sprintf((char *)temp, "count:%d",++sEnterCnt);
-//	LCD_DisplayStringLine(Line6,(uint8_t*)temp);
-//	setalarm(23,59,8); 
+//	__HAL_RTC_ALARM_CLEAR_FLAG(&hrtc,RTC_FLAG_ALRAF);
+	
 }

@@ -65,7 +65,7 @@ void MX_RTC_Init(void)
   */
   sTime.Hours = 0x23;
   sTime.Minutes = 0x59;
-  sTime.Seconds = 0x0;
+  sTime.Seconds = 0x45;
   sTime.SubSeconds = 0x0;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -85,12 +85,12 @@ void MX_RTC_Init(void)
   */
   sAlarm.AlarmTime.Hours = 0x23;
   sAlarm.AlarmTime.Minutes = 0x59;
-  sAlarm.AlarmTime.Seconds = 0x5;
+  sAlarm.AlarmTime.Seconds = 0x55;
   sAlarm.AlarmTime.SubSeconds = 0x0;
   sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
   sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
-  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-  sAlarm.AlarmDateWeekDay = 0x25;
+  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY;
+  sAlarm.AlarmDateWeekDay = RTC_WEEKDAY_MONDAY;
   sAlarm.Alarm = RTC_ALARM_A;
   if (HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
   {

@@ -115,7 +115,8 @@ static void usartPro(void)
 	
 	// 按键控制模式下接收到串口数据
 	if(contrlMod == 0) 
-		HAL_UART_Transmit(&huart1,(uint8_t*)"KEY CONTROL\r\n",sizeof("KEY CONTROL\r\n"),20); //  HAL_UART_Transmit_DMA
+//		HAL_UART_Transmit(&huart1,(uint8_t*)"KEY CONTROL\r\n",sizeof("KEY CONTROL\r\n"),20); //  HAL_UART_Transmit_DMA
+		HAL_UART_Transmit_DMA(&huart1,(uint8_t*)"KEY CONTROL\r\n",sizeof("KEY CONTROL\r\n")); //  HAL_UART_Transmit_DMA
 	
 	// 串口模式下接收到数据
 	if(contrlMod == 1)
