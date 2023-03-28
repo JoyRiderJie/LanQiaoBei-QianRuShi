@@ -97,18 +97,19 @@ void sysWork(void)
 		passwd_wrong_count = 0;
 	}
 	
-	sprintf(temp,"c:%d f:%6d",crrl_t,frd);
-	LCD_DisplayStringLine(Line0,(uint8_t*)temp);
-	
-	
-	sprintf(temp,"passwd:%s",Rxbuff);
-	LCD_DisplayStringLine(Line6,(uint8_t*)temp);
-	
-	sprintf(temp,"flag:%d count:%d",time7_count_start_flag,time7_count);
-	LCD_DisplayStringLine(Line7,(uint8_t*)temp);
-	
-	sprintf(temp,"data:%s len:%d",passwd,strlen(passwd));
-	LCD_DisplayStringLine(Line8,(uint8_t*)temp);
+	// 显示测试数据
+//	sprintf(temp,"c:%d f:%6d",crrl_t,frd);
+//	LCD_DisplayStringLine(Line0,(uint8_t*)temp);
+//	
+//	
+//	sprintf(temp,"passwd:%s",Rxbuff);
+//	LCD_DisplayStringLine(Line6,(uint8_t*)temp);
+//	
+//	sprintf(temp,"flag:%d count:%d",time7_count_start_flag,time7_count);
+//	LCD_DisplayStringLine(Line7,(uint8_t*)temp);
+//	
+//	sprintf(temp,"data:%s len:%d",passwd,strlen(passwd));
+//	LCD_DisplayStringLine(Line8,(uint8_t*)temp);
 }
 
 /***非阻塞模式下定时器中断回调函数***/
@@ -301,6 +302,7 @@ void pwmWorkByFre(unsigned int autoreloadDate,unsigned int compareDate)
 	//设置重装载值
 	__HAL_TIM_SetAutoreload(&htim2,autoreloadDate-1);
 	__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,compareDate);
+	HAL_TIM_GenerateEvent(&htim2, TIM_EVENTSOURCE_UPDATE);
 }
 
 

@@ -278,10 +278,10 @@ void pwmWorkState(void)
 {	
 	//输出占空比为30%  这里的判断条件是借用LED1的判断条件 因为他们的时长需求是一样的
 	if(uiTime7CountFlag[0] &&  uiTime7Count[0]%50<50)
-		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,30);
+		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,150);
 	//输出占空比为5%
 	if(uiTime7Count[0]%55>51)
-		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,5);
+		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,25);
 }
 
 /*************************************

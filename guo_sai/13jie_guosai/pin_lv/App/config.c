@@ -316,6 +316,7 @@ void FrePro(int mod)
 		frd = (int)(P1*para[0]-1);
 	//设置频率
 	__HAL_TIM_SetAutoreload(&htim17,frd);
+	HAL_TIM_GenerateEvent(&htim17, TIM_EVENTSOURCE_UPDATE);
 }
 
 
@@ -557,6 +558,7 @@ void FrePro(int mod)
 	__HAL_TIM_SetAutoreload(&htim17,frd);
 	//设置占空比
 	__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,cmpraeData);
+	HAL_TIM_GenerateEvent(&htim17, TIM_EVENTSOURCE_UPDATE);
 }
 
 #endif
