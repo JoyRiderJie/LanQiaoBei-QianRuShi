@@ -87,20 +87,20 @@ void changePwmFrd(void)
 	//手动模式
 	if(showData->mode%2 == 1)
 	{
-		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,showData->frdP6);
-		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,showData->frdP7);
+		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,100*showData->frdP6);
+		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,50*showData->frdP7);  
 	}
 	//自动模式 电压值为0V
 	else if(showData->mode%2 == 0 && showData->vValue == 0)
 	{
-		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,0);
-		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,0);
+		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,10000);
+		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,5000);
 	}
 	//自动模式  电压值为3.3V 
 	else if(showData->mode%2 == 0 && showData->vValue == 3.3)
 	{
-		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,100);
-		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,100);
+		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,0);
+		__HAL_TIM_SetCompare(&htim17,TIM_CHANNEL_1,0);
 	}
 }
 

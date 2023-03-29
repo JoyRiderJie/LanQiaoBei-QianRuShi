@@ -45,7 +45,7 @@ void sysInit(void)
 	HAL_UART_Receive_IT(&huart1,(uint8_t *)&ucRxbuff,sizeof(ucRxbuff)); 
 	//打开定时器17通道1的PWM输出功能
 	HAL_TIM_PWM_Start(&htim17,TIM_CHANNEL_1);
-	_pwmWorkByFre(0);
+	_pwmWorkByFre(500);
 	
 	//为汽车存储申请空间
 	pcarMessage = (struct head*)malloc(sizeof(struct head));
@@ -111,12 +111,12 @@ void _keyPro(void)
 		//按键B4 切换PA7的PWM输出
 		case 4: 
 			iPwmMode ^= 1;
-			//持续输出低电平
-			if(iPwmMode)
-				_pwmWorkByFre(20);
 			//输出占空比为20的PWM
+			if(iPwmMode)
+				_pwmWorkByFre(200);
+			//持续输出低电平
 			else
-				_pwmWorkByFre(0);
+				_pwmWorkByFre(500);
 			break;
 		default:return ;
 	}
