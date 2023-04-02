@@ -54,26 +54,16 @@ static void lcdDisplay(void)
 static void changePWM(void)
 {
 	/***设置重装载值 与 设置比较值 用于得到占空比***/
-//	char temp[20];
-//	u32 tempData[2] = {0,0};
 
 	// 设置PA1 TIM2
 	if(oldData[0].f != displayData[0].f || oldData[0].d != displayData[0].d)
 	{
-//		tempData[0] = 1000000/displayData[0].f-1;
 		__HAL_TIM_SetAutoreload(&htim2,1000000/displayData[0].f-1);
-		
-//		tempData[1] = (1000000/displayData[0].f+1)*displayData[0].d/100;
 		__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_2,(1000000/displayData[0].f+1)*displayData[0].d/100);
 		// 更新寄存器里的值
-//		TIM2->EGR = TIM_EGR_UG;
 		HAL_TIM_GenerateEvent(&htim2, TIM_EVENTSOURCE_UPDATE);
 		oldData[0].d = displayData[0].d;
-		oldData[0].f = displayData[0].f;
-//		rollbackLedByLocation(LED7);
-//		// 显示测试数据
-//		sprintf(temp,"td:%5d  %5d ",tempData[0],tempData[1]);
-//		LCD_DisplayStringLine(Line6,(u8*)temp);		
+		oldData[0].f = displayData[0].f;	
 	}
 	
 	// 设置PA7 TIM3
@@ -82,11 +72,9 @@ static void changePWM(void)
 		__HAL_TIM_SetAutoreload(&htim3,1000000/displayData[1].f-1);
 		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_2,(1000000/displayData[1].f+1)*displayData[1].d/100);
 		// 更新寄存器里的值
-//		TIM3->EGR = TIM_EGR_UG;
 		HAL_TIM_GenerateEvent(&htim3, TIM_EVENTSOURCE_UPDATE);
 		oldData[1].f = displayData[1].f;
 		oldData[1].d = displayData[1].d;
-//		rollbackLedByLocation(LED8);
 	}
 }
 
