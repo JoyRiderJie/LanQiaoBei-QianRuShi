@@ -31,19 +31,19 @@ static void lcdDisplay()
 	// 数据显示界面
 	if(LCDmod == 0)
 	{
-		LCD_DisplayStringLine(Line1,(u8*)"      DATA  ");
-		sprintf(temp,"     VR37:%.2fV   ",r37);
+		LCD_DisplayStringLine(Line1,(u8*) "       DATA    ");
+		sprintf(temp,"   VR37:%4.2fV    ",r37);
 		LCD_DisplayStringLine(Line3,(u8*)temp);
-		sprintf(temp,"     PA7:%dHz    ",Pa7Frd);
-		LCD_DisplayStringLine(Line4,(u8*)temp);
+		sprintf(temp,"   PA7:%dHz     ",Pa7Frd);
+		LCD_DisplayStringLine(Line5,(u8*)temp);
 	}
 	// 参数显示界面
 	else if(LCDmod == 1)
 	{
-		LCD_DisplayStringLine(Line1,(u8*)"      PARA  ");
-		sprintf(temp,"     VP:%.1fV      ",VTemp);
-		LCD_DisplayStringLine(Line3,(u8*)temp);
-		LCD_ClearLine(Line4);
+		LCD_ClearLine(Line1);
+		LCD_DisplayStringLine(Line3,(u8*)"       PARA     ");
+		sprintf(temp,"     VP1:%3.1fV   ",VTemp);
+		LCD_DisplayStringLine(Line5,(u8*)temp);
 	}
 	
 	// 显示数据测试
@@ -191,18 +191,18 @@ static void usartPro(void)
 /* -------------------------------- end -------------------------------- */
 static void changePWMData(void)
 {
-	// 占空比发生了更新 应该更新定时器占空比
-	if(Pa7Duty != oldPa7Duty || Pa7Frd != oldPa7Frd)
-	{
-		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_2,(int)((Pa7Duty*1.0/100.0)*(1000000/Pa7Frd)+0.5));
-		oldPa7Duty = Pa7Duty;
-	}
 	// 频率发生了更新 应该更新定时器频率
 	if(Pa7Frd != oldPa7Frd)
 	{
 		__HAL_TIM_SetAutoreload(&htim3,1000000/Pa7Frd-1);
 		HAL_TIM_GenerateEvent(&htim3,TIM_EVENTSOURCE_UPDATE);
 		oldPa7Frd = Pa7Frd;
+	}
+	// 占空比发生了更新 应该更新定时器占空比
+	if(Pa7Duty != oldPa7Duty || Pa7Frd != oldPa7Frd)
+	{
+		__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_2,(int)((Pa7Duty*1.0/100.0)*(1000000/Pa7Frd)+0.5));
+		oldPa7Duty = Pa7Duty;
 	}
 }
 
@@ -244,7 +244,7 @@ void sysWork(void)
 	keyPro();
 	// 串口数据处理函数
 	usartPro();
-	// 定时获取r37的值
+	// 间隔获取r37的值
 	if(HAL_GetTick() % 20 == 0 ) r37 = getADC(&hadc2);
 	// 定时器的频率与占空比更新逻辑函数
 	changePWMData();

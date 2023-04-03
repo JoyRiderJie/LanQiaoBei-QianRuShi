@@ -13,6 +13,9 @@ double getADC(ADC_HandleTypeDef *hadc)
 	unsigned int value = 0;
 	//开启转换ADC并且获取值
 	HAL_ADC_Start(hadc);
+	// 等待转换完成
+	while(LL_ADC_IsActiveFlag_EOC(ADC2) == 0)  ;
+	HAL_ADC_PollForConversion(hadc,50);
 	value = HAL_ADC_GetValue(hadc);
 	//ADC值的转换 3.3V是电压 4096是ADC的精度为12位也就是2^12=4096
 	return value*3.3/4096;
