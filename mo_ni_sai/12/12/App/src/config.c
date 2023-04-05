@@ -8,7 +8,11 @@ double V = 0 , Vmax = 3.0,Vmin = 1.0,VmaxTemp = 3.0,VminTemp = 1.0 ,VoldData = 0
 uint16_t T = 0;
 // LED相关
 char LEDFlag[3] = {0,0,0};
+// 计时相关
+uint32_t count = 0;
 
+// 测试
+//uint16_t tCount  = 0;
 
 /* -------------------------------- begin  -------------------------------- */
 /**
@@ -48,7 +52,9 @@ static void lcdDisplay()
 //	sprintf(temp,"maxT:%.1f minT:%.1f  ",VmaxTemp,VminTemp);
 //	LCD_DisplayStringLine(Line6,(u8*)temp);
 //	LCD_DisplayStringLine(Line8,(u8*)ucRxbuff);
-//	sprintf(temp,"V:%.2f  Vt:%.2f  ",V,VoldData);		
+//	sprintf(temp,"tC:%d    ",tCount++);		
+//	LCD_DisplayStringLine(Line8,(u8*)temp);
+//	sprintf(temp,"V:%.2fVt:%.2fcs:%d",V,VoldData,LEDFlag[0]);		
 //	LCD_DisplayStringLine(Line9,(u8*)temp);
 }
 
@@ -161,7 +167,6 @@ static void ledWork(void)
 	
 	// 串口一旦收到不正确或者是不满足要求的指令就点亮LED3
 	changeLedStateByLocation(LED3,LEDFlag[2]);	
-	
 }
 /* -------------------------------- begin  -------------------------------- */
 /**
@@ -174,25 +179,19 @@ static void ledWork(void)
  **/
 /* -------------------------------- end -------------------------------- */
 void ADCHandle(void)
-{
-	// 记录起始时间
-	static uint32_t Tstart = 0;
-	
+{	
 	// ADC获取
 	V = getADC(&hadc2);
 	
 	// 触发计时
-	if(V - VoldData > 0.02 && V -  Vmin >= 0 && V -  Vmin < 0.02)
+	if(V - VoldData > 0.02 && V -  Vmin >= 0 && V -  Vmin <= 0.03 )
 	{
-		Tstart = HAL_GetTick();
 		LEDFlag[0] = 1;
+		T = 0;
 	}
 	// 结束计时
-	else if(V - VoldData > 0.02 &&  Vmax -  V >= 0 && Vmax -  V < 0.02)
-	{
-		T = (HAL_GetTick() - Tstart) /1000; 
+	else if(V - VoldData > 0.02 &&  Vmax -  V >= 0 && Vmax -  V <= 0.03)
 		LEDFlag[0] = 0;
-	}
 	// 保存上一次的历史数据
 	VoldData = V;
 }
@@ -238,8 +237,7 @@ void sysWork(void)
 	keyPro();
 	
 	// ADC数据获取以及处理
-	if(HAL_GetTick() % 50 == 0)
-		ADCHandle();
+	ADCHandle();
 	
 	// 串口逻辑函数
 	usartPro();

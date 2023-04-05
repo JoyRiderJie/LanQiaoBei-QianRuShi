@@ -27,7 +27,9 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
-
+extern char LEDFlag[3];
+extern uint32_t count;
+extern uint16_t T;
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -188,7 +190,11 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-
+  if(LEDFlag[0] == 1 && ++count%1010 >= 1000)
+  {
+	  ++T;
+	  count = 0;
+  }
   /* USER CODE END SysTick_IRQn 1 */
 }
 
