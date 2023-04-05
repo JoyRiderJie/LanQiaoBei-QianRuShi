@@ -17,9 +17,8 @@
 extern TIM_HandleTypeDef htim17;
 extern UART_HandleTypeDef huart1;
 extern uint8_t ucKeyNumber;
-extern uint8_t ucRxbuff[22];
 extern uint16_t uiTime7Count;
-extern int iRxFlag;
+extern uint8_t ucRxbuff[22],_ucRxbuff[1],lenBuff;
 
 /***********************************************
 * 函数功能：自定义的系统初始化

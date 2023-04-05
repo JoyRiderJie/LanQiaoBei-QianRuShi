@@ -1,14 +1,9 @@
 #include "config.h"
 
-
 /* 存储串口1接收的数据 
 ** 数据样例：CNBR: A392: 2002021 20000  停车类型:车辆编号:进入/退出时间(YYMMDDHmmSS)
 ** 数据样例解释：表示停车类型CNBR,编号为A392的车辆,进入停车场时间为2020年2月2日12时整。
 **/
-uint8_t ucRxbuff[22];
-//记录是否收到信息
-int iRxFlag = 0;
-
 //频率测量
 u32 crrl_t,frd;
 u32 oldFrd = 1;
@@ -42,7 +37,7 @@ void sysInit(void)
 	//关闭所有的LED
 	changeAllLedByStateNumber(0);
 	//打开串口的中断接收功能
-	HAL_UART_Receive_IT(&huart1,(uint8_t *)&ucRxbuff,sizeof(ucRxbuff)); 
+	HAL_UART_Receive_IT(&huart1,(uint8_t *)&_ucRxbuff,sizeof(_ucRxbuff)); 
 	//打开定时器17通道1的PWM输出功能
 	HAL_TIM_PWM_Start(&htim17,TIM_CHANNEL_1);
 	_pwmWorkByFre(500);
@@ -193,6 +188,83 @@ void _usartMsgProcess(void)
 {
 	char temp[19];
 	//串口未收到数据该函数应该直接返回
+	if(strlen((char*)ucRxbuff) == 0) return ;
+	
+	struct node*msg = NULL;
+	//需要一个节点存储车辆信息
+	struct node* node = (struct node*)malloc(sizeof(struct node));
+	
+	//串口发送的数据长度不对
+	if(strlen((char*)ucRxbuff)!= 22)
+		goto MYERROR;
+	
+	//解析串口信息
+	sscanf((char*)ucRxbuff,"%4s:%4s:%2d%2d%2d%2d%2d%2d",node->ucType,node->ucCode,&node->year,&node->month,&node->day,&node->hour,&node->minute,&node->second);
+	msg = searchListNode(pcarMessage,node->ucCode);	
+	//车辆出库
+	if(msg != NULL)
+	{
+		uint32_t longTime[3] = {0,0,0};
+		//记录停车时间 单位为h
+		double dStopTime = 0;
+		//记录停车费用 单位为元
+		double dStopMoney = 0;	
+		//判断数据是否合理 不合理直接返回打印错误信息
+		if(checkData(msg->ucType,node->year,node->month,node->day,node->hour,node->minute,node->second)==0 || strcmp(node->ucType,msg->ucType)!=0)
+			goto MYERROR;
+		else
+		{
+			//时间转换
+			longTime[0] = myMktime(2000+msg->year,msg->month,msg->day,msg->hour,msg->minute,msg->second);
+			longTime[1] = myMktime(2000+node->year,node->month,node->day,node->hour,node->minute,node->second);
+			longTime[2] = longTime[1]-longTime[0];
+			//计算停留时间
+			dStopTime = ceil((double)(longTime[2]*1.0/3600));		
+			//计算停车费
+			if(msg->ucType[0] == 'C')
+				dStopMoney = dStopTime*dCnbrPrice;
+			else
+				dStopMoney = dStopTime*dVnbrPrice;
+			//发送信息到PC
+			sprintf(temp,"%s:%s:%.0f,%.2f\r\n",msg->ucType,msg->ucCode,dStopTime,dStopMoney);
+			HAL_UART_Transmit(&huart1,(uint8_t*)temp,sizeof(temp),150);
+			
+			//车辆出库
+			deleteListNode(pcarMessage,msg->ucCode);
+		}
+	}
+	// 新车入库
+	else
+	{
+		node->pNext = NULL;
+		//判断数据是否合理 不合理直接返回打印错误信息
+		if(checkData(node->ucType,node->year,node->month,node->day,node->hour,node->minute,node->second)==0 || pcarMessage->uiIdleCount-1<0)
+			goto MYERROR;
+		//数据无误  添加车辆信息到存储链表中
+		else
+			addListNode(pcarMessage,node);	
+	}	
+	
+	//清除本次串口接收到的数据 避免影响后续数据
+	memset(ucRxbuff,0,sizeof(ucRxbuff));
+	//处理完本次串口接收到的数据后清除标志位
+	lenBuff = 0;
+	return ;
+	
+	//接收数据出现问题时 发送错误信息到PC
+MYERROR:	
+		HAL_UART_Transmit(&huart1,(uint8_t*)"Error\r\n",sizeof("Error\r\n"),50);
+		//清除本次串口接收到的数据 避免影响后续数据
+		memset(ucRxbuff,0,sizeof(ucRxbuff));
+		//处理完本次串口接收到的数据后清除标志位
+		lenBuff = 0;
+}
+#if 0
+
+void _usartMsgProcess(void)
+{
+	char temp[19];
+	//串口未收到数据该函数应该直接返回
 	if(!iRxFlag) return ;
 	
 	struct node*msg = NULL;
@@ -215,6 +287,7 @@ void _usartMsgProcess(void)
 		double dStopMoney = 0;
 		//记录开始停车时间 结束停车时间
 		struct node*eTime = (struct node*)malloc(sizeof(struct node));
+#if 0
 		getStringRxBuffDataByLocation((char*)ucRxbuff,eTime->ucType,0,4);
 		eTime->year = getIntRxBuffDataByLocation((char*)ucRxbuff,10,12);
 		eTime->month = getIntRxBuffDataByLocation((char*)ucRxbuff,12,14);
@@ -222,6 +295,9 @@ void _usartMsgProcess(void)
 		eTime->hour = getIntRxBuffDataByLocation((char*)ucRxbuff,16,18);
 		eTime->minute = getIntRxBuffDataByLocation((char*)ucRxbuff,18,20);
 		eTime->second = getIntRxBuffDataByLocation((char*)ucRxbuff,20,22);
+#else
+		sscanf((char*)ucRxbuff,"%s:");
+#endif		
 		//判断数据是否合理 不合理直接返回打印错误信息
 		if(checkData(msg->ucType,eTime->year,eTime->month,eTime->day,eTime->hour,eTime->minute,eTime->second)==0 || strcmp(eTime->ucType,msg->ucType)!=0)
 		{
@@ -284,3 +360,8 @@ void _usartMsgProcess(void)
 		//处理完本次串口接收到的数据后清除标志位
 		iRxFlag = 0;
 }
+
+#endif
+
+
+
